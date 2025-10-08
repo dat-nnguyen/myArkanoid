@@ -1,61 +1,91 @@
 package core;
 
-import javafx.scene.shape.Rectangle;
+import javafx.scene.canvas.GraphicsContext;
 
+
+/**
+ * This is the base of all entities in the game which contains size and position
+ * x, y top-left corner coordinates of the rectangle including entities
+ */
 public abstract class GameObject {
+    protected double x;
+    protected double y;
+    protected double width;
+    protected double height;
 
-    protected double positionX;
-    protected double positionY;
-    protected int width;
-    protected int height;
+    /**
+     * @param x X top-left corner coordinate
+     * @param y Y top-left corner coordinate
+     * @param width size of entity
+     * @param height size of entity
+     */
 
-    public GameObject(int width, int height) {
-        this.positionX = 0.0;
-        this.positionY = 0.0;
+    public GameObject(double x, double y,  double width, double height) {
+        this.x = x;
+        this.y = y;
         this.width = width;
         this.height = height;
     }
 
-    public GameObject(double positionX, double positionY, int width, int height) {
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.width = width;
-        this.height = height;
-    }
+    /**
+     * Update logic for object.
+     * Call each frame with deltaTime(second)
+     * @param deltaTime time between last frame to current frame
+     */
+    public abstract void update(double deltaTime);
 
-    public double getPositionX() {
-        return positionX;
-    }
+    /**
+     * Draw entities with GraphicsContext
+     * @param gc GraphicsContext of Canvas
+     */
+    public abstract void render(GraphicsContext gc);
 
-    public void setPositionX(double positionX) {
-        this.positionX = positionX;
+    /**
+     * GETTER method
+     */
+    public double getX() {
+        return x;
     }
-
-    public double getPositionY() {
-        return positionY;
+    public double getY() {
+        return y;
     }
-
-    public void setPositionY(double positionY) {
-        this.positionY = positionY;
-    }
-
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    /**
+     * SETTER method
+     */
+    public void setX(double x) {
+        this.x = x;
+    }
+    public void setY(double y) {
+        this.y = y;
+    }
+    public void setWidth(double width) {
+        this.width = width;
+    }
+    public void setHeight(double height) {
         this.height = height;
     }
 
-    public abstract void update(double deltaTime, boolean[] keyPressed);
+    /**
+     * @return the center along the X and Y axis (used for collision detection when needed).
+     */
 
-    public abstract Rectangle render();
+    public double getCenterX() {
+        return x + (width / 2);
+    }
+    public double getCenterY() {
+        return y + (height / 2);
+    }
+    /**
+     * Why use getCenter?
+     * In almost framework, (x, y) coordinates of GameObject is conventionally top-left corner
+     * of retangle around objects so it is easy for draw objects
+     * When we calculate for collision or distance of two objects, we have to use real center coordinate
+     */
 }

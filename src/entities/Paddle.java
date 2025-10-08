@@ -1,25 +1,24 @@
 package entities;
 
-import core.Constants;
 import core.MovableObject;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import static utils.Constants.PADDLE_SPEED;
 
 public class Paddle extends MovableObject {
 
-    private double speed = Constants.paddleSpeed;
     private PowerUpType currentPowerUp;
     private Rectangle Node;
 
     public Paddle(int width, int height) {
         super(width, height);
-        setDeltaX(speed);
+        setDeltaX(PADDLE_SPEED);
         currentPowerUp = PowerUpType.NONE;
     }
 
     public Paddle(double positionX, double positionY, int width, int height) {
         super(positionX, positionY, width, height);
-        setDeltaX(speed);
+        setDeltaX(PADDLE_SPEED);
         Node = new Rectangle(positionX, positionY, width, height);
         Node.setFill(Color.BLACK);
     }
