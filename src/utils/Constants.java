@@ -14,7 +14,7 @@ public class Constants {
     public static int PADDLE_WIDTH = 100;
     public static int PADDLE_HEIGHT = 20;
 
-    public static float BALL_SPEED = 5.0f;
-    public static float PADDLE_SPEED = 600.0f;
+    public static float BALL_SPEED = 300f;
+    public static float PADDLE_SPEED = 450.0f;
 
 }

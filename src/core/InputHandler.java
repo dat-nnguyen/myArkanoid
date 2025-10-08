@@ -14,21 +14,19 @@ import javafx.scene.input.MouseEvent;
  */
 public class InputHandler {
 
-    // ===== Keyboard state =====
+    //Keyboard state
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean spacePressed = false; // For gun power-up or launch
 
-    // ===== Mouse state =====
+    // Mouse state
     private double mouseX = 0;            // Current X position of the mouse
     private boolean mousePressed = false; // Whether mouse is currently pressed
     private boolean mouseClickedOnce = false; // Marks a single click event
 
     /**
      * Registers input listeners for keyboard and mouse on the given Scene.
-     *
      * <p>This should be called once when initializing the scene (e.g., before starting the game loop).
-     *
      * @param scene the JavaFX Scene where events will be captured
      */
     public void getKey(Scene scene) {
@@ -65,8 +63,8 @@ public class InputHandler {
                     }
                 });
 
-        // === Mouse input ===
-        // Track mouse movement (used for paddle movement)
+        // Mouse input
+        // Track mouse movement
         scene.addEventHandler(
                 MouseEvent.MOUSE_MOVED,
                 new EventHandler<MouseEvent>() {
@@ -100,29 +98,23 @@ public class InputHandler {
                 });
     }
 
-    // ===== Keyboard getters =====
-    /** Returns true if the LEFT arrow key is currently pressed. */
+    // Keyboard getters
     public boolean isLeftPressed() {
         return leftPressed;
     }
-
-    /** Returns true if the RIGHT arrow key is currently pressed. */
     public boolean isRightPressed() {
         return rightPressed;
     }
-
-    /** Returns true if the SPACE key is currently pressed. */
     public boolean isSpacePressed() {
         return spacePressed;
     }
 
-    // ===== Mouse getters =====
+    //Mouse getters
     /** Returns the current X position of the mouse cursor. */
     public double getMouseX() {
         return mouseX;
     }
 
-    /** Returns true if the mouse is currently held down. */
     public boolean isMousePressed() {
         return mousePressed;
     }
