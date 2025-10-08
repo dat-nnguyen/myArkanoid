@@ -1,3 +1,38 @@
-# Default ignored files
-/shelf/
-/workspace.xml
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Build output
+out/
+bin/
+target/
+build/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Maven
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Eclipse (phòng khi ai mở bằng Eclipse)
+.classpath
+.project
+.settings/
+
+# VSCode (nếu có)
+.vscode/
