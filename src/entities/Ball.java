@@ -6,6 +6,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import utils.Constants;
 import utils.Vector2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.awt.*;
 
 public class Ball extends MovableObject {
 
@@ -28,12 +32,13 @@ public class Ball extends MovableObject {
         if (randomValue > 0.5) {
             initialVx = 1f; // 50%
         } else {
-            initialVx = -1f; // 50% khả năng còn lại
+            initialVx = -1f; //
         }
         this.velocity = new Vector2D(initialVx, -1f).normalized().multiply(Constants.BALL_SPEED);
-
         this.node = new Circle(x, y, radius);
         this.node.setFill(Color.CRIMSON);
+
+
     }
 
     @Override
@@ -53,6 +58,11 @@ public class Ball extends MovableObject {
         if (this.getY() < 0) {
             this.reverseVelocityY();
             this.position.y = 0; // Clamp
+        }
+        // bottom
+        if (this.getY() + this.width >= Constants.HEIGHT) {
+            this.reverseVelocityY();
+            this.position.y = Constants.HEIGHT - this.width; // Clamp position
         }
 
         // update position of ball
@@ -78,4 +88,5 @@ public class Ball extends MovableObject {
     public Node getNode() {
         return this.node;
     }
+
 }

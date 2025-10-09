@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         Pane root = new Pane(); // Pane is a layout that allow us to set up position for objects
         Scene scene = new Scene(root, Constants.WIDTH, Constants.HEIGHT);
-        scene.setFill(Color.BLACK);
+        scene.setFill(Color.CHOCOLATE);
 
         GameManager gameManager = new GameManager(root, scene);
         gameManager.startGame();

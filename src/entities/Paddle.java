@@ -15,7 +15,7 @@ public class Paddle extends MovableObject {
         super(x, y, width, height);
 
         paddle = new Rectangle(x, y, width, height);
-        paddle.setFill(Color.BLUE);
+        paddle.setFill(Color.BLANCHEDALMOND);
         paddle.setArcWidth(20);
         paddle.setArcHeight(20);
     }

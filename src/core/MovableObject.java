@@ -2,6 +2,7 @@ package core;
 
 import utils.Vector2D;
 
+
 public abstract class MovableObject extends GameObject {
     protected Vector2D velocity;
     protected Vector2D previousPosition;

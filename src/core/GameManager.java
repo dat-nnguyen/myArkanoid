@@ -4,6 +4,8 @@ import entities.Ball;
 import entities.Brick;
 import entities.Paddle;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import utils.Constants;
@@ -58,7 +60,7 @@ public class GameManager {
 
     private void createPaddle() {
         float x = (Constants.WIDTH - Constants.PADDLE_WIDTH) / 2.0f;
-        float y = Constants.HEIGHT - 60; // set position for paddle
+        float y = Constants.HEIGHT - 40; // set position for paddle
         paddle = new Paddle(x, y, Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT);
         root.getChildren().add(paddle.getNode()); // display paddle
     }
@@ -95,9 +97,9 @@ public class GameManager {
                 float y = verticalPadding + i * (brickHeight + spacing); // use to set position for brick
                 Color color;
                 if (i % 2 == 0) { // if even
-                    color = Color.ORANGE;
+                    color = Color.BLACK ;
                 } else { // if odd
-                    color = Color.GOLD;
+                    color = Color.WHITE;
                 }
                 Brick brick = new Brick(x, y, brickWidth, brickHeight, color, 1);
                 bricks.add(brick);

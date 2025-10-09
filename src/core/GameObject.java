@@ -1,6 +1,8 @@
 package core;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import utils.Vector2D;
 
 /**
@@ -21,13 +23,14 @@ public abstract class GameObject {
      * Use for render and check collision
      */
     protected int width, height;
-
+    Image image;
+    ImageView imageView;
     /**
      * Constructor of GameObject
      * @param x X coordinate.
      * @param y Y coordinate.
-     * @param width
-     * @param height
+     * @param width .
+     * @param height .
      */
     public GameObject(float x, float y, int width, int height) {
         this.position = new Vector2D(x, y);
@@ -52,15 +55,14 @@ public abstract class GameObject {
      * Checks collision between this and another object by using
      * AABB(Axis-Aligned Bounding Box) method
      * Will be use in CollisionManager class
-     * @param other The other GameObject to check collision
      * @return {@code true} if the bounding boxes intersect, {@code false} if not
      */
-    public boolean intersects(GameObject other) {
+   /* public boolean intersects(GameObject other) {
         return position.x < other.position.x + other.width &&
                 position.x + width > other.position.x &&
                 position.y < other.position.y + other.height &&
                 position.y + height > other.position.y;
-    }
+    }*/
 
     //GETTER - READ ONLY
 
