@@ -1,43 +1,63 @@
 package entities;
 
+import core.InputHandler;
 import core.MovableObject;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import static utils.Constants.PADDLE_SPEED;
+import utils.Constants;
 
 public class Paddle extends MovableObject {
 
-    private PowerUpType currentPowerUp;
-    private Rectangle Node;
+    private final Rectangle paddle;
 
-    public Paddle(int width, int height) {
-        super(width, height);
-        setDeltaX(PADDLE_SPEED);
-        currentPowerUp = PowerUpType.NONE;
+    public Paddle(float x, float y, int width, int height) {
+        super(x, y, width, height);
+
+        paddle = new Rectangle(x, y, width, height);
+        paddle.setFill(Color.BLANCHEDALMOND);
+        paddle.setArcWidth(20);
+        paddle.setArcHeight(20);
     }
 
-    public Paddle(double positionX, double positionY, int width, int height) {
-        super(positionX, positionY, width, height);
-        setDeltaX(PADDLE_SPEED);
-        Node = new Rectangle(positionX, positionY, width, height);
-        Node.setFill(Color.BLACK);
+    /**
+     * Update paddle status base on keyboard input and deltaTime
+     * @param deltaTime .
+     * @param inputHandler responsible for input
+     */
+    public void update(float deltaTime, InputHandler inputHandler) {
+        // reset velocity x to 0, it will be able to stop paddle after released the key
+        this.velocity.x = 0;
+
+        if (inputHandler.isLeftPressed()) {
+            this.velocity.x = -Constants.PADDLE_SPEED;
+        }
+        if (inputHandler.isRightPressed()) {
+            this.velocity.x = Constants.PADDLE_SPEED;
+        }
+        //update new position
+        //newPosition = oldPosition + velocity * deltaTime
+        super.update(deltaTime);
+
+        // clamps checking
+        if (this.position.x < 0) {
+            this.position.x = 0;
+        }
+        if (this.position.x + this.width > Constants.WIDTH) {
+            this.position.x = Constants.WIDTH - this.width;
+        }
+
+        // update position for animation
+        this.paddle.setX(this.position.x);
     }
 
     @Override
-    public void update(double deltaTime, boolean[] keyPressed) {
-        move(deltaTime, keyPressed);
-        Node.setX(this.positionX);
-        Node.setY(this.positionY);
-        // Update powerup sau...
+    public Node getNode() {
+        return this.paddle;
     }
 
     @Override
-    public Rectangle render() {
-        return Node;
+    public void update(float deltaTime) {
+        // we use update(deltaTime, inputHandler) so don't need to override here
     }
-
-    public void applyPowerUp(PowerUpType power) {
-        currentPowerUp = power;
-    }
-
 }

@@ -1,0 +1,38 @@
+# IntelliJ IDEA project files to ignore
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Compiled output
+out/
+bin/
+build/
+target/
+
+# Log files
+*.log
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Gradle cache
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Maven
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Eclipse project files (in case someone opens it with Eclipse)
+.classpath
+.project
+.settings/
+
+# VSCode project files (if used)
+.vscode/
