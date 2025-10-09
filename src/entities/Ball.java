@@ -30,21 +30,13 @@ public class Ball extends MovableObject {
         directionY = Math.sin(res) * (-1);
     }
 
-
     public Ball() {
-        super(Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2);
+        super(Constants.START_POSITION_X, Constants.START_POSITION_Y, Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2);
         boolean isLeft = (rd.nextInt(2) == 0);
         setRandomDirection(isLeft);
         this.setDeltaX(speed * directionX);
         this.setDeltaY(speed * directionY);
-    }
-
-    public Ball(double positionX, double positionY) {
-        super(positionX, positionY, Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2);
-        boolean isLeft = (rd.nextInt(2) == 0);
-        setRandomDirection(isLeft);
-        this.setDeltaX(speed * directionX);
-        this.setDeltaY(speed * directionY);
+        System.out.println("Init: " + this.getPositionX() + " " + this.getPositionY());
     }
 
     @Override
@@ -73,6 +65,7 @@ public class Ball extends MovableObject {
             }
             newPositionX = Constants.START_POSITION_X;
             newPositionY = Constants.START_POSITION_Y;
+            System.out.println("Reset: " + newPositionX + " " + newPositionY);
             boolean isLeft = (rd.nextInt(2) == 0);
             setRandomDirection(isLeft);
             this.setDeltaX(speed * directionX);
