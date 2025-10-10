@@ -1,23 +1,28 @@
 package core;
 
 import entities.Ball;
+import entities.Brick;
+import entities.BrickType;
 import entities.Paddle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import java.util.ArrayList;
 
 // game loop(time line/ animation)
 public class GameLoop extends AnimationTimer {
 
     private final Ball ball;
     private final Paddle paddle;
+    private final ArrayList<Brick> brickList;
     private final GraphicsContext gc;
     private final InputHandler input;
     private long lastTime;
 
-    public GameLoop(Ball ball, Paddle paddle, GraphicsContext gc, InputHandler input) {
+    public GameLoop(Ball ball, Paddle paddle, ArrayList<Brick> brickList, GraphicsContext gc, InputHandler input) {
         this.ball = ball;
         this.paddle = paddle;
+        this.brickList = brickList;
         this.gc = gc;
         this.input = input;
         lastTime = 0;
@@ -38,11 +43,28 @@ public class GameLoop extends AnimationTimer {
         paddle.setKeyPressed(KeyCode.RIGHT, input.isRightPressed());
         paddle.update(deltaTime);
         ball.update(deltaTime);
-        CollisionManager.checkCollision_Ball_Paddle(ball, paddle);
+        for (Brick brick : brickList) {
+            brick.update(deltaTime);
+        }
+        checkCollision();
+    }
+
+    private void checkCollision() {
+        CollisionManager.checkBallWithPaddle(ball, paddle);
+        for (Brick brick : brickList) {
+            if (!brick.getIsDestroyed() && brick.getCurrentBrickType() != BrickType.IMPOSSIBLE) {
+                CollisionManager.checkBallWithBrick(ball, brick);
+            }
+        }
     }
 
     private void render() {
         ball.render(gc);
         paddle.render(gc);
+        for (Brick brick : brickList) {
+            if (!brick.getIsDestroyed()) {
+                brick.render(gc);
+            }
+        }
     }
 }

@@ -37,12 +37,6 @@ public abstract class GameObject {
         this.height = height;
     }
 
-    /**
-     * @return the center along the X and Y axis (used for collision detection when needed).
-     */
-    public double getCenterX() { return positionX + (width / 2.0); }
-    public double getCenterY() { return positionY + (height / 2.0); }
-
     public double getPositionX() {
         return positionX;
     }

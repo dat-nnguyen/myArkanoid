@@ -36,7 +36,7 @@ public class Ball extends MovableObject {
         setRandomDirection(isLeft);
         this.setDeltaX(speed * directionX);
         this.setDeltaY(speed * directionY);
-        System.out.println("Init: " + this.getPositionX() + " " + this.getPositionY());
+        System.out.println("⚽ Ball Init Success !");
     }
 
     @Override
@@ -57,15 +57,14 @@ public class Ball extends MovableObject {
         if (newPositionY >= Constants.SCREEN_HEIGHT + 10) {
             // Để thêm 10 tạo 1 khoảng rơi rồi mới update mạng
             lives -= 1;
-            System.out.println("Lives Remaining: " + lives);
+            System.out.println("⚽ Lives Remaining: " + lives);
             if (lives <= 0) {
                 isOver = true;
-                System.out.println("Game Over !");
+                System.out.println("\uD83D\uDC80 Game Over !");
                 return;
             }
             newPositionX = Constants.START_POSITION_X;
             newPositionY = Constants.START_POSITION_Y;
-            System.out.println("Reset: " + newPositionX + " " + newPositionY);
             boolean isLeft = (rd.nextInt(2) == 0);
             setRandomDirection(isLeft);
             this.setDeltaX(speed * directionX);
