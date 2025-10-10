@@ -21,8 +21,14 @@ public class GameManager {
         System.out.println("Lives: " + ball.getLives());
         Paddle paddle = new Paddle((Constants.SCREEN_WIDTH - 200) / 2.0, Constants.SCREEN_HEIGHT - 50, 200, 20);
         ArrayList<Brick> brickList = new ArrayList<Brick>();
-        Brick test1 = new Brick(100, 100, 100, 50, BrickType.HARD);
+        Brick test1 = new Brick(100, 100, 60, 30, BrickType.HARD);
+        Brick test2 = new Brick(200, 200, 60, 30, BrickType.IMPOSSIBLE);
+        Brick test3 = new Brick(300, 300, 60, 30, BrickType.MEDIUM);
+        Brick test4 = new Brick(400, 400, 60, 30, BrickType.NONE);
         brickList.add(test1);
+        brickList.add(test2);
+        brickList.add(test3);
+        brickList.add(test4);
         InputHandler input = new InputHandler();
         input.getKey(scene);
         Pane root = new Pane(canvas);

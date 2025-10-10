@@ -67,7 +67,20 @@ public class Brick extends GameObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.DEEPPINK);
+        switch (currentBrickType) {
+            case BrickType.NONE:
+                gc.setFill(Color.FORESTGREEN);
+                break;
+            case BrickType.MEDIUM:
+                gc.setFill(Color.GOLD);
+                break;
+            case BrickType.HARD:
+                gc.setFill(Color.INDIANRED);
+                break;
+            case BrickType.IMPOSSIBLE:
+                gc.setFill(Color.DARKGRAY);
+                break;
+        }
         gc.fillRect(this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
     }
 

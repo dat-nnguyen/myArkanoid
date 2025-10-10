@@ -4,6 +4,8 @@ import entities.Ball;
 import entities.Brick;
 import entities.BrickType;
 import entities.Paddle;
+import CollisionManager.BallWithPaddle;
+import CollisionManager.BallWithBrick;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -50,10 +52,10 @@ public class GameLoop extends AnimationTimer {
     }
 
     private void checkCollision() {
-        CollisionManager.checkBallWithPaddle(ball, paddle);
+        BallWithPaddle.checkCollision(ball, paddle);
         for (Brick brick : brickList) {
-            if (!brick.getIsDestroyed() && brick.getCurrentBrickType() != BrickType.IMPOSSIBLE) {
-                CollisionManager.checkBallWithBrick(ball, brick);
+            if (!brick.getIsDestroyed()) {
+                BallWithBrick.checkCollision(ball, brick);
             }
         }
     }
