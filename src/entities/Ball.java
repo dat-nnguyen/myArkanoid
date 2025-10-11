@@ -1,21 +1,30 @@
 package entities;
 
-import core.Constants;
+import utils.Constants;
 import core.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import java.util.Random;
 
+/**
+ * Ball management.
+ *
+ */
 public class Ball extends MovableObject {
 
-    private double speed = Constants.BALL_SPEED;
-    private int radius = Constants.BALL_RADIUS;
-    private double directionX;
-    private double directionY;
-    private boolean isOver = false;
-    private int lives = Constants.BALL_LIVES;
-    private final Random rd = new Random();
+    private double speed = Constants.BALL_SPEED; // Default ball movement speed.
+    private int radius = Constants.BALL_RADIUS; // Default ball radius.
+    private double directionX; // x-axis ball direction.
+    private double directionY; // y-axis ball direction.
+    private boolean isOver = false; // Check if game is over.
+    private int lives = Constants.BALL_LIVES; // Remaining lives.
+    private final Random rd = new Random(); // Ball direction randomizer.
 
+    /**
+     * Set ball direction to a random angle (30 to 150 degrees).
+     *
+     * @param isLeft Check if the ball's collision point with the paddle heavily biased to the left.
+     */
     public void setRandomDirection(boolean isLeft) {
         double min, max;
         if (isLeft) {
@@ -30,6 +39,10 @@ public class Ball extends MovableObject {
         directionY = Math.sin(res) * (-1);
     }
 
+    /**
+     * Initialize object.
+     *
+     */
     public Ball() {
         super(Constants.START_POSITION_X, Constants.START_POSITION_Y, Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2);
         boolean isLeft = (rd.nextInt(2) == 0);
@@ -37,27 +50,31 @@ public class Ball extends MovableObject {
         this.setDeltaX(speed * directionX);
         this.setDeltaY(speed * directionY);
         System.out.println("⚽ Ball Init Success !");
+        System.out.println("⚽ Remaining lives: " + lives);
     }
 
     @Override
     public void move(double deltaTime) {
-        double newPositionX = this.getPositionX() + this.getDeltaX()*deltaTime;
-        double newPositionY = this.getPositionY() + this.getDeltaY()*deltaTime;
 
-        //Check bound screen
+        this.setDeltaX(directionX * speed * deltaTime);
+        this.setDeltaY(directionY * speed * deltaTime);
+        double newPositionX = this.getPositionX() + this.getDeltaX();
+        double newPositionY = this.getPositionY() + this.getDeltaY();
+
         if (newPositionX + this.getWidth() > Constants.SCREEN_WIDTH) {
             newPositionX = Constants.SCREEN_WIDTH - this.getWidth();
             directionX *= -1;
-            this.setDeltaX(speed * directionX);
-        } else if (newPositionX <= 0) {
-            newPositionX = this.getWidth();
+        } else if (newPositionX < 0) {
+            newPositionX = 0;
             directionX *= -1;
-            this.setDeltaX(speed * directionX);
         }
-        if (newPositionY >= Constants.SCREEN_HEIGHT + 10) {
-            // Để thêm 10 tạo 1 khoảng rơi rồi mới update mạng
+
+        if (newPositionY < 0) {
+            newPositionY = 0;
+            directionY *= -1;
+        } else if (newPositionY > Constants.SCREEN_HEIGHT + 10) {
             lives -= 1;
-            System.out.println("⚽ Lives Remaining: " + lives);
+            System.out.println("⚽ Remaining lives: " + lives);
             if (lives <= 0) {
                 isOver = true;
                 System.out.println("\uD83D\uDC80 Game Over !");
@@ -67,13 +84,8 @@ public class Ball extends MovableObject {
             newPositionY = Constants.START_POSITION_Y;
             boolean isLeft = (rd.nextInt(2) == 0);
             setRandomDirection(isLeft);
-            this.setDeltaX(speed * directionX);
-            this.setDeltaY(speed * directionY);
-        } else if (newPositionY <= 0) {
-            newPositionY = this.getHeight();
-            directionY *= -1;
-            this.setDeltaY(speed * directionY);
         }
+
         this.setPositionX(newPositionX);
         this.setPositionY(newPositionY);
     }
@@ -81,7 +93,7 @@ public class Ball extends MovableObject {
     @Override
     public void update(double deltaTime) {
         if (!isOver) move(deltaTime);
-        //Update power sau...
+        //Update power-up sau...
     }
 
     @Override
@@ -89,6 +101,8 @@ public class Ball extends MovableObject {
         gc.setFill(Color.BLACK);
         gc.fillOval(this.getPositionX(), this.getPositionY(), radius * 2, radius * 2);
     }
+
+    //Getter and Setter method.
 
     public double getSpeed() { return speed; }
 

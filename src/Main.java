@@ -1,4 +1,4 @@
-import core.Constants;
+import utils.Constants;
 import core.GameManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,7 +23,6 @@ public class Main extends Application {
         primaryStage.setTitle("Akanoi");
         primaryStage.show();
     }
-
     /**
      * @param args the command line arguments
      */

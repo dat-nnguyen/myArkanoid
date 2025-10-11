@@ -1,75 +1,88 @@
 package entities;
 
-import core.Constants;
+import utils.Constants;
 import core.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
+/**
+ * Paddle management.
+ *
+ */
 public class Paddle extends MovableObject {
 
-    private double speed = Constants.PADDLE_SPEED;
-    private PowerUpType currentPowerUp = PowerUpType.NONE;
-    private final boolean[] keyPressed = new boolean[256];
+    private double speed = Constants.PADDLE_SPEED; // Default paddle movement speed.
+    private PowerUpType currentPowerUp = PowerUpType.NONE; // Current paddle power-up.
+    private final boolean[] keyPressed = new boolean[256]; // Handle keyboard events.
 
+    /**
+     * Initialize default object.
+     *
+     * @param width The width of the object.
+     * @param height The height of the object.
+     */
     public Paddle(int width, int height) {
         super(width, height);
         this.setDeltaX(speed);
     }
 
+    /**
+     * Initialize object.
+     *
+     * @param positionX Upper-left x-coordinate.
+     * @param positionY Upper-left y-coordinate.
+     * @param width The width of the object.
+     * @param height The height of the object.
+     */
     public Paddle(double positionX, double positionY, int width, int height) {
         super(positionX, positionY, width, height);
         this.setDeltaX(speed);
     }
 
     /**
-     * Chỉnh sự kiện bấm phím cho phím truyền vào.
+     * Handle the key press event for the passed-in key.
      *
-     * @param keycode phím được lắng nghe sự kiện.
-     * @param check thao tác chỉnh tắt / bật cho phím được truyền vào.
+     * @param keycode Key Being Listened To.
+     * @param isTurnOn Enable/Disable Passed-in Key.
      */
-    public void setKeyPressed(KeyCode keycode, boolean check) {
+    public void setKeyPressed(KeyCode keycode, boolean isTurnOn) {
         if (keycode.getCode() < 256) {
-            keyPressed[keycode.getCode()] = check;
+            keyPressed[keycode.getCode()] = isTurnOn;
         }
     }
 
     @Override
     public void move(double deltaTime) {
+
+        double deltaX = 0;
+
         if (keyPressed[KeyCode.RIGHT.getCode()]) {
-            double newPositionX = this.getPositionX() + this.getDeltaX() * deltaTime;
-            if (newPositionX + this.getWidth() > Constants.SCREEN_WIDTH) {
-                newPositionX = Constants.SCREEN_WIDTH - this.getWidth();
-            }
-            this.setPositionX(newPositionX);
+            deltaX += speed * deltaTime;
         }
         if (keyPressed[KeyCode.LEFT.getCode()]) {
-            double newPositionX = this.getPositionX() - this.getDeltaX() * deltaTime;
-            if (newPositionX < 0) {
-                newPositionX = 0;
-            }
-            this.setPositionX(newPositionX);
+            deltaX += speed * deltaTime * (-1);
         }
-        if (keyPressed[KeyCode.UP.getCode()]) {
-            double newPositionY = this.getPositionY() - this.getDeltaY() * deltaTime;
-            if (newPositionY < 0) {
-                newPositionY = 0;
-            }
-            this.setPositionY(newPositionY);
+
+        this.setDeltaX(deltaX);
+
+        double newPositionX = this.getPositionX() + this.getDeltaX();
+
+        if (newPositionX + this.getWidth() > Constants.SCREEN_WIDTH) {
+            newPositionX = Constants.SCREEN_WIDTH - this.getWidth();
+            this.setDeltaX(0);
+        } else if (newPositionX < 0) {
+            newPositionX = 0;
+            this.setDeltaX(0);
         }
-        if (keyPressed[KeyCode.DOWN.getCode()]) {
-            double newPositionY = this.getPositionY() + this.getDeltaY() * deltaTime;
-            if (newPositionY + this.getHeight() > Constants.SCREEN_HEIGHT) {
-                newPositionY = Constants.SCREEN_HEIGHT - this.getHeight();
-            }
-            this.setPositionY(newPositionY);
-        }
+
+        this.setPositionX(newPositionX);
     }
 
     @Override
     public void update(double deltaTime) {
         move(deltaTime);
-        // Update powerup sau...
+        // Update power-up sau...
     }
 
     @Override
@@ -77,6 +90,8 @@ public class Paddle extends MovableObject {
         gc.setFill(Color.BLUE); // Sau này thay bằng texture sau....
         gc.fillRect(this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
     }
+
+    // Getter and Setter method.
 
     public double getSpeed() { return speed; }
 

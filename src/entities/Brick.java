@@ -4,29 +4,59 @@ import core.GameObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Brick management.
+ *
+ */
 public class Brick extends GameObject {
 
-    private boolean isDestroyed = false;
-    private BrickType currentBrickType = BrickType.NONE;
-    private int lives = 1;
-    private boolean destroyedLog = false;
+    private boolean isDestroyed = false; // Check if brick is destroyed.
+    private BrickType currentBrickType = BrickType.NORMAL; // Current brick type.
+    private int lives = 1; // Hits remaining to destroy.
+    private boolean destroyedLog = false; // Log to record which objects have been destroyed.
 
+    /**
+     * Get info of this brick.
+     *
+     * @return Info in format: (x,y) TYPE=current_type.
+     */
     private String getInfo() {
         String position = "(" + this.getPositionX() + "," + this.getPositionY() + ")";
         String type = "TYPE=" + currentBrickType;
         return position + " " + type;
     }
 
+    /**
+     * Initialize object with default coordinates (0,0) and normal type.
+     *
+     * @param width The width of the object.
+     * @param height The height of the object.
+     */
     public Brick(int width, int height) {
         super(width, height);
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
 
+    /**
+     * Initialize object with normal type.
+     *
+     * @param positionX Upper-left x-coordinate.
+     * @param positionY Upper-left y-coordinate.
+     * @param width The width of the object.
+     * @param height The height of the object.
+     */
     public Brick(double positionX, double positionY, int width, int height) {
         super(positionX, positionY, width, height);
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
 
+    /**
+     * Initialize object with default coordinates (0,0).
+     *
+     * @param width The width of the object.
+     * @param height The height of the object.
+     * @param currentBrickType Type of brick.
+     */
     public Brick(int width, int height, BrickType currentBrickType) {
         super(width, height);
         this.currentBrickType = currentBrickType;
@@ -41,6 +71,15 @@ public class Brick extends GameObject {
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
 
+    /**
+     * Initialize object.
+     *
+     * @param positionX Upper-left x-coordinate.
+     * @param positionY Upper-left y-coordinate.
+     * @param width The width of the object.
+     * @param height The height of the object.
+     * @param currentBrickType Type of brick.
+     */
     public Brick(double positionX, double positionY, int width, int height, BrickType currentBrickType) {
         super(positionX, positionY, width, height);
         this.currentBrickType = currentBrickType;
@@ -57,6 +96,7 @@ public class Brick extends GameObject {
 
     @Override
     public void update(double deltaTime) {
+        //Check if brick is not destroyed and not logged.
         if (lives == 0 && !destroyedLog) {
             destroyedLog = true;
             isDestroyed = true;
@@ -67,15 +107,19 @@ public class Brick extends GameObject {
 
     @Override
     public void render(GraphicsContext gc) {
+        if (isDestroyed) {
+            return;
+        }
+        //Render by type of brick.
         switch (currentBrickType) {
-            case BrickType.NONE:
+            case BrickType.NORMAL:
                 gc.setFill(Color.FORESTGREEN);
                 break;
             case BrickType.MEDIUM:
                 gc.setFill(Color.GOLD);
                 break;
             case BrickType.HARD:
-                gc.setFill(Color.INDIANRED);
+                gc.setFill(Color.PALEVIOLETRED);
                 break;
             case BrickType.IMPOSSIBLE:
                 gc.setFill(Color.DARKGRAY);
@@ -83,6 +127,8 @@ public class Brick extends GameObject {
         }
         gc.fillRect(this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
     }
+
+    //Getter and Setter method.
 
     public boolean getIsDestroyed() { return isDestroyed; }
 

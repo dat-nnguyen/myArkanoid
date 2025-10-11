@@ -2,13 +2,13 @@ package core;
 
 import entities.Ball;
 import entities.Brick;
-import entities.BrickType;
 import entities.Paddle;
 import CollisionManager.BallWithPaddle;
 import CollisionManager.BallWithBrick;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import utils.Constants;
 import java.util.ArrayList;
 
 // game loop(time line/ animation)
@@ -54,9 +54,7 @@ public class GameLoop extends AnimationTimer {
     private void checkCollision() {
         BallWithPaddle.checkCollision(ball, paddle);
         for (Brick brick : brickList) {
-            if (!brick.getIsDestroyed()) {
-                BallWithBrick.checkCollision(ball, brick);
-            }
+            BallWithBrick.checkCollision(ball, brick);
         }
     }
 
@@ -64,9 +62,7 @@ public class GameLoop extends AnimationTimer {
         ball.render(gc);
         paddle.render(gc);
         for (Brick brick : brickList) {
-            if (!brick.getIsDestroyed()) {
-                brick.render(gc);
-            }
+            brick.render(gc);
         }
     }
 }

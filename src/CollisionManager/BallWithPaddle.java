@@ -2,10 +2,12 @@ package CollisionManager;
 
 import entities.Ball;
 import entities.Paddle;
+import utils.Constants;
 
 public class BallWithPaddle {
 
     public static void checkCollision(Ball ball, Paddle paddle) {
+
         double ballCenterX = ball.getPositionX() + ball.getRadius();
         double ballCenterY = ball.getPositionY() + ball.getRadius();
         double ballRadius = ball.getRadius();
@@ -40,7 +42,7 @@ public class BallWithPaddle {
         //Check distance
         if (distance <= ballRadius) {
             double overlap = ballRadius - distance;
-            if (distance != 0) {
+            if (distance > Constants.EPSILON) {
                 double newPositionX = ball.getPositionX() - (diffX / distance) * overlap;
                 double newPositionY = ball.getPositionY() - (diffY / distance) * overlap;
                 ball.setPositionX(newPositionX);
@@ -49,11 +51,12 @@ public class BallWithPaddle {
             if (checkPointY == paddle.getPositionY()) {
                 boolean isLeft = ballCenterX < paddleCenterX;
                 ball.setRandomDirection(isLeft);
-                ball.setDeltaX(ball.getSpeed() * ball.getDirectionX());
-                ball.setDeltaY(ball.getSpeed() * ball.getDirectionY());
+            } else if (checkPointX == paddle.getPositionX()
+                    || checkPointX == (paddle.getPositionX() + paddle.getWidth())) {
+                ball.setDirectionX(ball.getDirectionX() * (-1));
             } else {
                 ball.setDirectionX(ball.getDirectionX() * (-1));
-                ball.setDeltaX(ball.getDirectionX() * ball.getSpeed());
+                ball.setDirectionY(ball.getDirectionY() * (-1));
             }
         }
     }
