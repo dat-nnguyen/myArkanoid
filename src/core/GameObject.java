@@ -1,73 +1,76 @@
 package core;
 
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import utils.Vector2D;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
- * This is abstract class defining all entities in the game.
- * include attributes and their behavior
+ * Game Object Management (e.g., buttons, ball, paddle, bricks, etc.).
  *
  */
 public abstract class GameObject {
 
-    /**
-     * @param position top-left corner of rectangle surrounding the object
-     * protected Ball, Paddle, etcs. can access to
-     */
-    protected Vector2D position;
+    private double positionX; // Upper-left x-coordinate.
+    private double positionY; // Upper-left y-coordinate.
+    private int width; // The width of the object.
+    private int height; // The height of the object.
 
     /**
-     * Size of entity
-     * Use for render and check collision
+     * Initialize object with default coordinates (0,0).
+     *
+     * @param width The width of the object.
+     * @param height The height of the object.
      */
-    protected int width, height;
-    Image image;
-    ImageView imageView;
-    /**
-     * Constructor of GameObject
-     * @param x X coordinate.
-     * @param y Y coordinate.
-     * @param width .
-     * @param height .
-     */
-    public GameObject(float x, float y, int width, int height) {
-        this.position = new Vector2D(x, y);
+    public GameObject(int width, int height) {
+        this.positionX = 0.0;
+        this.positionY = 0.0;
         this.width = width;
         this.height = height;
     }
 
     /**
-     * Update status of entity after each frame
-     * @param deltaTime time elapsed since the previous frame.
-     */
-    public abstract void update(float deltaTime);
-
-    /**
+     * Initialize object.
      *
-     * @return Node (animation entity of JavaFx) display on screen
-     * For instance, Circle stands for Ball, Rectangle stands for Paddle
+     * @param positionX Upper-left x-coordinate.
+     * @param positionY Upper-left y-coordinate.
+     * @param width The width of the object.
+     * @param height The height of the object.
      */
-    public abstract Node getNode();
+    public GameObject(double positionX, double positionY, int width, int height) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.width = width;
+        this.height = height;
+    }
 
     /**
-     * Checks collision between this and another object by using
-     * AABB(Axis-Aligned Bounding Box) method
-     * Will be use in CollisionManager class
-     * @return {@code true} if the bounding boxes intersect, {@code false} if not
+     * Update logic for object.
+     * Call each frame with deltaTime (second).
+     *
+     * @param deltaTime Time between last frame to current frame.
      */
-   /* public boolean intersects(GameObject other) {
-        return position.x < other.position.x + other.width &&
-                position.x + width > other.position.x &&
-                position.y < other.position.y + other.height &&
-                position.y + height > other.position.y;
-    }*/
+    public abstract void update(double deltaTime);
 
-    //GETTER - READ ONLY
+    /**
+     * Draw entities with GraphicsContext.
+     *
+     * @param gc GraphicsContext of Canvas.
+     */
+    public abstract void render(GraphicsContext gc);
 
-    public float getX() { return position.x; }
-    public float getY() { return position.y; }
+    // Getter and Setter method.
+
+    public double getPositionX() { return positionX; }
+
+    public void setPositionX(double positionX) { this.positionX = positionX; }
+
+    public double getPositionY() { return positionY; }
+
+    public void setPositionY(double positionY) { this.positionY = positionY; }
+
     public int getWidth() { return width; }
+
+    public void setWidth(int width) { this.width = width; }
+
     public int getHeight() { return height; }
+
+    public void setHeight(int height) { this.height = height; }
 }

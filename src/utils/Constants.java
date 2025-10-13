@@ -1,20 +1,15 @@
 package utils;
 
 public class Constants {
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
-    public static final float EPSILON = 1e-6f;
-    /**
-     * EPSILON is floating point-tolerance
-     * when you compare (0.1f + 0.2f) to 0.3f, it will return false
-     * In this case, we have to compare absolute value ((0,1f + 0.2f) - 0.3f) < EPSILON
-     * The smaller the EPSILON, the more precise the comparison
-     */
-    public static int BALL_SIZE = 16;
-    public static int PADDLE_WIDTH = 100;
-    public static int PADDLE_HEIGHT = 20;
 
-    public static float BALL_SPEED = 300f;
-    public static float PADDLE_SPEED = 450.0f;
+    public static final int SCREEN_WIDTH = 800; // Default window width.
+    public static final int SCREEN_HEIGHT = 936; // Default window height.
+    public static final double PADDLE_SPEED = 600.0; // Default paddle movement speed.
+    public static final double BALL_SPEED = 720.0; // Default ball movement speed.
+    public static final int BALL_RADIUS = 10; // Default ball radius.
+    public static final int BALL_LIVES = 3; // Default ball lives.
+    public static final double START_POSITION_X = (SCREEN_WIDTH - BALL_RADIUS * 2)/ 2.0; // Default ball spawn positionX.
+    public static final double START_POSITION_Y = SCREEN_HEIGHT - (BALL_RADIUS * 2) - 80; // Default ball spawn positionY.
+    public static final double EPSILON = 1e-9; // Calculating errors in real number operations.
 
 }

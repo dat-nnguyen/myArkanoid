@@ -1,63 +1,103 @@
 package entities;
 
-import core.InputHandler;
-import core.MovableObject;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import utils.Constants;
+import core.MovableObject;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
+/**
+ * Paddle management.
+ *
+ */
 public class Paddle extends MovableObject {
 
-    private final Rectangle paddle;
+    private double speed = Constants.PADDLE_SPEED; // Default paddle movement speed.
+    private PowerUpType currentPowerUp = PowerUpType.NONE; // Current paddle power-up.
+    private final boolean[] keyPressed = new boolean[256]; // Handle keyboard events.
 
-    public Paddle(float x, float y, int width, int height) {
-        super(x, y, width, height);
-
-        paddle = new Rectangle(x, y, width, height);
-        paddle.setFill(Color.BLANCHEDALMOND);
-        paddle.setArcWidth(20);
-        paddle.setArcHeight(20);
+    /**
+     * Initialize default object.
+     *
+     * @param width The width of the object.
+     * @param height The height of the object.
+     */
+    public Paddle(int width, int height) {
+        super(width, height);
+        this.setDeltaX(speed);
     }
 
     /**
-     * Update paddle status base on keyboard input and deltaTime
-     * @param deltaTime .
-     * @param inputHandler responsible for input
+     * Initialize object.
+     *
+     * @param positionX Upper-left x-coordinate.
+     * @param positionY Upper-left y-coordinate.
+     * @param width The width of the object.
+     * @param height The height of the object.
      */
-    public void update(float deltaTime, InputHandler inputHandler) {
-        // reset velocity x to 0, it will be able to stop paddle after released the key
-        this.velocity.x = 0;
+    public Paddle(double positionX, double positionY, int width, int height) {
+        super(positionX, positionY, width, height);
+        this.setDeltaX(speed);
+    }
 
-        if (inputHandler.isLeftPressed()) {
-            this.velocity.x = -Constants.PADDLE_SPEED;
+    /**
+     * Handle the key press event for the passed-in key.
+     *
+     * @param keycode Key Being Listened To.
+     * @param isTurnOn Enable/Disable Passed-in Key.
+     */
+    public void setKeyPressed(KeyCode keycode, boolean isTurnOn) {
+        if (keycode.getCode() < 256) {
+            keyPressed[keycode.getCode()] = isTurnOn;
         }
-        if (inputHandler.isRightPressed()) {
-            this.velocity.x = Constants.PADDLE_SPEED;
-        }
-        //update new position
-        //newPosition = oldPosition + velocity * deltaTime
-        super.update(deltaTime);
-
-        // clamps checking
-        if (this.position.x < 0) {
-            this.position.x = 0;
-        }
-        if (this.position.x + this.width > Constants.WIDTH) {
-            this.position.x = Constants.WIDTH - this.width;
-        }
-
-        // update position for animation
-        this.paddle.setX(this.position.x);
     }
 
     @Override
-    public Node getNode() {
-        return this.paddle;
+    public void move(double deltaTime) {
+
+        double deltaX = 0;
+
+        if (keyPressed[KeyCode.RIGHT.getCode()]) {
+            deltaX += speed * deltaTime;
+        }
+        if (keyPressed[KeyCode.LEFT.getCode()]) {
+            deltaX += speed * deltaTime * (-1);
+        }
+
+        this.setDeltaX(deltaX);
+
+        double newPositionX = this.getPositionX() + this.getDeltaX();
+
+        if (newPositionX + this.getWidth() > Constants.SCREEN_WIDTH) {
+            newPositionX = Constants.SCREEN_WIDTH - this.getWidth();
+            this.setDeltaX(0);
+        } else if (newPositionX < 0) {
+            newPositionX = 0;
+            this.setDeltaX(0);
+        }
+
+        this.setPositionX(newPositionX);
     }
 
     @Override
-    public void update(float deltaTime) {
-        // we use update(deltaTime, inputHandler) so don't need to override here
+    public void update(double deltaTime) {
+        move(deltaTime);
+        // Update power-up sau...
     }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        gc.setFill(Color.BLUE); // Sau này thay bằng texture sau....
+        gc.fillRect(this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
+    }
+
+    // Getter and Setter method.
+
+    public double getSpeed() { return speed; }
+
+    public void setSpeed(double speed) { this.speed = speed; }
+
+    public PowerUpType getCurrentPowerUp() { return currentPowerUp; }
+
+    public void setCurrentPowerUp(PowerUpType currentPowerUp) { this.currentPowerUp = currentPowerUp; }
 }
