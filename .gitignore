@@ -36,3 +36,12 @@ release.properties
 
 # VSCode project files (if used)
 .vscode/
+
+# Ignore everything by default
+*
+
+# Allow these:
+!src/
+!pom.xml
+!build.gradle
+!.gitignore
