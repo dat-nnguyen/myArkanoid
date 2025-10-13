@@ -62,11 +62,11 @@ public class Brick extends GameObject {
         this.currentBrickType = currentBrickType;
         switch (currentBrickType) {
             case BrickType.MEDIUM:
-                    lives = 3;
-                    break;
+                lives = 3;
+                break;
             case BrickType.HARD:
-                    lives = 5;
-                    break;
+                lives = 5;
+                break;
         }
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
