@@ -1,27 +1,38 @@
-# IntelliJ IDEA project files to ignore
+# --- Ignore tất cả ---
+# ⚠️ Dùng /* thay vì * để không chặn các thư mục con của những thư mục được phép
+/*
+
+# --- Cho phép các thư mục / file quan trọng ---
+!.gitignore
+!src/
+!pom.xml
+!build.gradle
+!README.md
+
+# --- IntelliJ IDEA ---
 .idea/
 *.iml
 *.iws
 *.ipr
 
-# Compiled output
+# --- Output / Build ---
 out/
 bin/
 build/
 target/
 
-# Log files
+# --- Logs ---
 *.log
 
-# OS-generated files
+# --- OS generated files ---
 .DS_Store
 Thumbs.db
 
-# Gradle cache
+# --- Gradle cache ---
 .gradle/
 !gradle/wrapper/gradle-wrapper.jar
 
-# Maven
+# --- Maven junk files ---
 .mvn/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -29,10 +40,5 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 
-# Eclipse project files (in case someone opens it with Eclipse)
-.classpath
-.project
-.settings/
-
-# VSCode project files (if used)
+# --- VSCode ---
 .vscode/
