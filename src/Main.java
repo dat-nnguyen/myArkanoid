@@ -13,14 +13,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-        Pane tmp = new Pane();
-        Scene scene = new Scene(tmp, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        primaryStage.setTitle("Akarnoid");
+        Pane pane = new Pane();
+        Scene scene = new Scene(pane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         new GameManager(scene);
 
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Akanoi");
         primaryStage.show();
     }
     /**
