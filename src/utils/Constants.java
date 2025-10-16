@@ -2,7 +2,7 @@ package utils;
 
 public class Constants {
 
-    public static final int SCREEN_WIDTH = 1000; // Default window width.
+    public static final int SCREEN_WIDTH = 500;//default window width
     public static final int SCREEN_HEIGHT = 800; // Default window height.
     public static final double PADDLE_SPEED = 600.0; // Default paddle movement speed.
     public static final double BALL_SPEED = 600.0; // Default ball movement speed.
