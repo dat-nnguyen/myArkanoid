@@ -51,12 +51,13 @@ public class BallWithPaddle {
             if (checkPointY == paddle.getPositionY()) {
                 boolean isLeft = ballCenterX < paddleCenterX;
                 ball.setRandomDirection(isLeft);
+
             } else if (checkPointX == paddle.getPositionX()
                     || checkPointX == (paddle.getPositionX() + paddle.getWidth())) {
+                boolean check = Math.abs(checkPointX - paddle.getPositionX()) <= Constants.EPSILON;
+                double newPositionX = (check) ? paddle.getPositionX() - ballRadius : paddle.getPositionX() + paddle.getWidth() + ballRadius;
+                ball.setPositionX(newPositionX);
                 ball.setDirectionX(ball.getDirectionX() * (-1));
-            } else {
-                ball.setDirectionX(ball.getDirectionX() * (-1));
-                ball.setDirectionY(ball.getDirectionY() * (-1));
             }
         }
     }

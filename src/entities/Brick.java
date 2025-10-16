@@ -22,7 +22,7 @@ public class Brick extends GameObject {
      */
     private String getInfo() {
         String position = "(" + this.getPositionX() + "," + this.getPositionY() + ")";
-        String type = "TYPE=" + currentBrickType;
+        String type = "TYPE = " + currentBrickType;
         return position + " " + type;
     }
 

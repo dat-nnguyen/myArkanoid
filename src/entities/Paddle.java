@@ -87,7 +87,7 @@ public class Paddle extends MovableObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.BLUE); // Sau này thay bằng texture sau....
+        gc.setFill(Color.RED); // Sau này thay bằng texture sau
         gc.fillRect(this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
     }
 
