@@ -1,8 +1,10 @@
 package entities;
 
 import core.GameObject;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import utils.Constants;
 
 /**
  * Brick management.
@@ -15,6 +17,8 @@ public class Brick extends GameObject {
     private int lives = 1; // Hits remaining to destroy.
     private boolean destroyedLog = false; // Log to record which objects have been destroyed.
 
+    private boolean powerUpSpawned = false;
+
     /**
      * Get info of this brick.
      *
@@ -22,7 +26,7 @@ public class Brick extends GameObject {
      */
     private String getInfo() {
         String position = "(" + this.getPositionX() + "," + this.getPositionY() + ")";
-        String type = "TYPE = " + currentBrickType;
+        String type = "TYPE=" + currentBrickType;
         return position + " " + type;
     }
 
@@ -33,7 +37,7 @@ public class Brick extends GameObject {
      * @param height The height of the object.
      */
     public Brick(int width, int height) {
-        super(width, height);
+        super(width, height, BrickType.NORMAL.getTexturePath());
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
 
@@ -46,7 +50,7 @@ public class Brick extends GameObject {
      * @param height The height of the object.
      */
     public Brick(double positionX, double positionY, int width, int height) {
-        super(positionX, positionY, width, height);
+        super(positionX, positionY, width, height, BrickType.NORMAL.getTexturePath());
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
 
@@ -58,16 +62,9 @@ public class Brick extends GameObject {
      * @param currentBrickType Type of brick.
      */
     public Brick(int width, int height, BrickType currentBrickType) {
-        super(width, height);
+        super(width, height, currentBrickType.getTexturePath());
         this.currentBrickType = currentBrickType;
-        switch (currentBrickType) {
-            case BrickType.MEDIUM:
-                lives = 3;
-                break;
-            case BrickType.HARD:
-                lives = 5;
-                break;
-        }
+        lives = currentBrickType.getHits();
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
 
@@ -81,27 +78,22 @@ public class Brick extends GameObject {
      * @param currentBrickType Type of brick.
      */
     public Brick(double positionX, double positionY, int width, int height, BrickType currentBrickType) {
-        super(positionX, positionY, width, height);
+        super(positionX, positionY, width, height, currentBrickType.getTexturePath());
         this.currentBrickType = currentBrickType;
-        switch (currentBrickType) {
-            case BrickType.MEDIUM:
-                lives = 3;
-                break;
-            case BrickType.HARD:
-                lives = 5;
-                break;
-        }
+        lives = currentBrickType.getHits();
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
     }
 
     @Override
     public void update(double deltaTime) {
-        //Check if brick is not destroyed and not logged.
-        if (lives == 0 && !destroyedLog) {
+        if (currentBrickType.isUnbreakable()) return;
+
+        // Check if brick is not destroyed and not logged.
+        if (lives <= 0 && !destroyedLog) {
             destroyedLog = true;
             isDestroyed = true;
             String position = "(" + this.getPositionX() + "," + this.getPositionY() + ")";
-            System.out.println("\uD83E\uDDF1 Brick Destroyed: " + getInfo());
+            System.out.println("🧱 Brick Destroyed: " + getInfo());
         }
     }
 
@@ -110,22 +102,7 @@ public class Brick extends GameObject {
         if (isDestroyed) {
             return;
         }
-        //Render by type of brick.
-        switch (currentBrickType) {
-            case BrickType.NORMAL:
-                gc.setFill(Color.FORESTGREEN);
-                break;
-            case BrickType.MEDIUM:
-                gc.setFill(Color.GOLD);
-                break;
-            case BrickType.HARD:
-                gc.setFill(Color.PALEVIOLETRED);
-                break;
-            case BrickType.IMPOSSIBLE:
-                gc.setFill(Color.DARKGRAY);
-                break;
-        }
-        gc.fillRect(this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
+        gc.drawImage(this.getTexture(), this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
     }
 
     //Getter and Setter method.
@@ -141,5 +118,17 @@ public class Brick extends GameObject {
     public int getLives() { return lives; }
 
     public void setLives(int lives) { this.lives = lives; }
+
+    /**
+     * Kiểm tra xem brick có cần spawn power-up không.
+     * CHỈ trả về true MỘT LẦN duy nhất.
+     */
+    public boolean shouldSpawnPowerUp() {
+        if (isDestroyed && !powerUpSpawned && !currentBrickType.isUnbreakable()) {
+            powerUpSpawned = true; // Đánh dấu đã spawn
+            return true;
+        }
+        return false;
+    }
 
 }

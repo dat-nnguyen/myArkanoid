@@ -1,5 +1,7 @@
 package core;
 
+import javafx.scene.image.Image;
+
 /**
  * Moving object management.
  *
@@ -14,9 +16,10 @@ public abstract class MovableObject extends GameObject{
      *
      * @param width The width of the object.
      * @param height The height of the object.
+     * @param texturePath The path to the object's texture.
      */
-    public MovableObject(int width, int height) {
-        super(width, height);
+    public MovableObject(int width, int height, String texturePath) {
+        super(width, height, texturePath);
     }
 
     /**
@@ -26,9 +29,10 @@ public abstract class MovableObject extends GameObject{
      * @param positionY Upper-left y-coordinate.
      * @param width The width of the object.
      * @param height The height of the object.
+     * @param texturePath The path to the object's texture.
      */
-    public MovableObject(double positionX, double positionY, int width, int height) {
-        super(positionX, positionY, width, height);
+    public MovableObject(double positionX, double positionY, int width, int height, String texturePath) {
+        super(positionX, positionY, width, height, texturePath);
     }
 
     /**
@@ -38,9 +42,10 @@ public abstract class MovableObject extends GameObject{
      * @param height The height of the object.
      * @param deltaX Displacement vector along the x-axis.
      * @param deltaY Displacement vector along the y-axis.
+     * @param texturePath The path to the object's texture.
      */
-    public MovableObject(int width, int height, double deltaX, double deltaY) {
-        super(width, height);
+    public MovableObject(int width, int height, double deltaX, double deltaY, String texturePath) {
+        super(width, height, texturePath);
         this.deltaX = deltaX;
         this.deltaY = deltaY;
     }
@@ -54,9 +59,10 @@ public abstract class MovableObject extends GameObject{
      * @param height The height of the object.
      * @param deltaX Displacement vector along the x-axis.
      * @param deltaY Displacement vector along the y-axis.
+     * @param texturePath The path to the object's texture.
      */
-    public MovableObject(double positionX, double positionY, int width, int height, double deltaX, double deltaY) {
-        super(positionX, positionY, width, height);
+    public MovableObject(double positionX, double positionY, int width, int height, double deltaX, double deltaY, String texturePath) {
+        super(positionX, positionY, width, height, texturePath);
         this.deltaX = deltaX;
         this.deltaY = deltaY;
     }
@@ -67,6 +73,12 @@ public abstract class MovableObject extends GameObject{
      * @param deltaTime Time between last frame to current frame.
      */
     public abstract void move(double deltaTime);
+
+    /**
+     * Reset object.
+     *
+     */
+    public abstract void reset();
 
     // Getter and Setter method.
 

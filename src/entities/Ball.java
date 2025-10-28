@@ -1,10 +1,10 @@
 package entities;
 
+import javafx.scene.image.Image;
 import utils.Constants;
 import core.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import java.util.Random;
 
 /**
  * Ball management.
@@ -14,41 +14,39 @@ public class Ball extends MovableObject {
 
     private double speed = Constants.BALL_SPEED; // Default ball movement speed.
     private int radius = Constants.BALL_RADIUS; // Default ball radius.
-    private double directionX; // x-axis ball direction.
-    private double directionY; // y-axis ball direction.
-    private boolean isOver = false; // Check if game is over.
+    private double directionX = 0.0; // x-axis ball direction.
+    private double directionY = 1.0; // y-axis ball direction.
     private int lives = Constants.BALL_LIVES; // Remaining lives.
-    private final Random rd = new Random(); // Ball direction randomizer.
+    public boolean play = false; // Want to play ?
 
     /**
-     * Set ball direction to a random angle (30 to 150 degrees).
+     * Set ball direction (30 to 150 degrees).
      *
-     * @param isLeft Check if the ball's collision point with the paddle heavily biased to the left.
+     * @param ballCenterX PositionX of the center of the ball.
+     * @param paddleCenterX PositionX of the center of the paddle.
+     * @param paddleWidth The height of the paddle.
      */
-    public void setRandomDirection(boolean isLeft) {
-        double min, max;
-        if (isLeft) {
-            min = Math.toRadians(90);
-            max = Math.toRadians(150);
-        } else {
-            min = Math.toRadians(30);
-            max = Math.toRadians(90);
-        }
-        double res = min + (max - min) * rd.nextDouble();
-        directionX = Math.cos(res);
-        directionY = Math.sin(res) * (-1);
+    public void setDirection(double ballCenterX, double paddleCenterX, double paddleWidth) {
+        // Determine the ball's position relative to the paddle (left, middle, or right).
+        double relativeIntersectX = ballCenterX - paddleCenterX; // left ( < 0), middle ( = 0), right (> 0).
+        // Scale the ball's relative position to a value between -1.0 and 1.0.
+        double normalize = relativeIntersectX / (paddleWidth / 2.0);
+        if (normalize > 1.0) normalize = 1.0;
+        else if (normalize < -1.0) normalize = -1.0;
+        double baseAngle = Math.PI / 2;
+        double maxAngleOffset = Math.PI / 3;
+        double bounceAngle = baseAngle - (normalize * maxAngleOffset); // (30 - 150 degree).
+        directionX = Math.cos(bounceAngle);
+        directionY = -Math.sin(bounceAngle);
     }
+
 
     /**
      * Initialize object.
      *
      */
     public Ball() {
-        super(Constants.START_POSITION_X, Constants.START_POSITION_Y, Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2);
-        boolean isLeft = (rd.nextInt(2) == 0);
-        setRandomDirection(isLeft);
-        this.setDeltaX(speed * directionX);
-        this.setDeltaY(speed * directionY);
+        super(Constants.BALL_START_POSITION_X, Constants.BALL_START_POSITION_Y, Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2, Constants.BALL_TEXTURE_PATH);
         System.out.println("⚽ Ball Init Success !");
         System.out.println("⚽ Remaining lives: " + lives);
     }
@@ -56,34 +54,43 @@ public class Ball extends MovableObject {
     @Override
     public void move(double deltaTime) {
 
+        double xMin = Constants.MARGIN_WIDTH;
+        double xMax = xMin + Constants.PLAY_SCREEN_WIDTH;
+        double yMin = Constants.MARGIN_HEIGHT;
+        double yMax = yMin + Constants.PLAY_SCREEN_HEIGHT;
+
         this.setDeltaX(directionX * speed * deltaTime);
         this.setDeltaY(directionY * speed * deltaTime);
+
         double newPositionX = this.getPositionX() + this.getDeltaX();
         double newPositionY = this.getPositionY() + this.getDeltaY();
 
-        if (newPositionX + this.getWidth() > Constants.SCREEN_WIDTH) {
-            newPositionX = Constants.SCREEN_WIDTH - this.getWidth();
+        if (newPositionX + this.getWidth() > xMax) {
+            newPositionX = xMax - this.getWidth();
             directionX *= -1;
-        } else if (newPositionX < 0) {
-            newPositionX = 0;
+        } else if (newPositionX < xMin) {
+            newPositionX = xMin;
             directionX *= -1;
         }
 
-        if (newPositionY < 0) {
-            newPositionY = 0;
+        if (newPositionY < yMin) {
+            newPositionY = yMin;
             directionY *= -1;
-        } else if (newPositionY > Constants.SCREEN_HEIGHT + 10) {
+        } else if (newPositionY > yMax + 20) {
+            // Ball rơi xuống dưới
             lives -= 1;
+            play = false;
             System.out.println("⚽ Remaining lives: " + lives);
+
             if (lives <= 0) {
-                isOver = true;
-                System.out.println("\uD83D\uDC80 Game Over !");
+                System.out.println("💀 Ball died!");
+                // KHÔNG reset position, để GameLoop xử lý
                 return;
             }
-            newPositionX = Constants.START_POSITION_X;
-            newPositionY = Constants.START_POSITION_Y;
-            boolean isLeft = (rd.nextInt(2) == 0);
-            setRandomDirection(isLeft);
+
+            // KHÔNG TỰ ĐỘNG RESET - GameLoop sẽ xử lý
+            // Giữ nguyên vị trí để GameLoop biết ball đã chết
+            return;
         }
 
         this.setPositionX(newPositionX);
@@ -92,14 +99,29 @@ public class Ball extends MovableObject {
 
     @Override
     public void update(double deltaTime) {
-        if (!isOver) move(deltaTime);
+        if (lives > 0 && play) move(deltaTime);
         //Update power-up sau...
     }
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
-        gc.fillOval(this.getPositionX(), this.getPositionY(), radius * 2, radius * 2);
+        if (lives > 0) {
+            gc.drawImage(this.getTexture(), this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
+        }
+    }
+
+    @Override
+    public void reset() {
+        speed = Constants.BALL_SPEED; // Default ball movement speed.
+        radius = Constants.BALL_RADIUS; // Default ball radius.
+        directionX = 0.0; // x-axis ball direction.
+        directionY = 1.0; // y-axis ball direction.
+        lives = Constants.BALL_LIVES; // Remaining lives.
+        play = false;
+        this.setPositionX(Constants.BALL_START_POSITION_X);
+        this.setPositionY(Constants.BALL_START_POSITION_Y);
+        this.setWidth(Constants.BALL_RADIUS * 2);
+        this.setHeight(Constants.BALL_RADIUS * 2);
     }
 
     //Getter and Setter method.
@@ -120,11 +142,8 @@ public class Ball extends MovableObject {
 
     public void setDirectionY(double directionY) { this.directionY = directionY; }
 
-    public boolean isOver() { return isOver; }
-
-    public void setOver(boolean isOver) { this.isOver = isOver; }
-
     public int getLives() { return lives; }
 
     public void setLives(int lives) { this.lives = lives; }
+
 }

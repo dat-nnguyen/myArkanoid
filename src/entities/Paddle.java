@@ -6,6 +6,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
+import java.util.Objects;
+
+import java.util.Arrays;
+
+import PowerUpSystem.PowerUpType;
+
 /**
  * Paddle management.
  *
@@ -15,28 +21,40 @@ public class Paddle extends MovableObject {
     private double speed = Constants.PADDLE_SPEED; // Default paddle movement speed.
     private PowerUpType currentPowerUp = PowerUpType.NONE; // Current paddle power-up.
     private final boolean[] keyPressed = new boolean[256]; // Handle keyboard events.
+    private String originalTexturePath = Constants.PADDLE_TEXTURE_PATH;
 
     /**
-     * Initialize default object.
-     *
-     * @param width The width of the object.
-     * @param height The height of the object.
+     * Set paddle texture for power-up effect.
      */
-    public Paddle(int width, int height) {
-        super(width, height);
-        this.setDeltaX(speed);
+    public void setPowerUpTexture(String texturePath) {
+        if (texturePath != null) {
+            try {
+                String textureUrl = Objects.requireNonNull(getClass().getResource(texturePath)).toExternalForm();
+                this.setTexture(new javafx.scene.image.Image(textureUrl));
+            } catch (NullPointerException e) {
+                System.err.println("Power-up texture loading failed: " + texturePath);
+            }
+        }
+    }
+
+    /**
+     * Reset paddle texture to original.
+     */
+    public void resetTexture() {
+        try {
+            String textureUrl = Objects.requireNonNull(getClass().getResource(originalTexturePath)).toExternalForm();
+            this.setTexture(new javafx.scene.image.Image(textureUrl));
+        } catch (NullPointerException e) {
+            System.err.println("Original texture loading failed!");
+        }
     }
 
     /**
      * Initialize object.
      *
-     * @param positionX Upper-left x-coordinate.
-     * @param positionY Upper-left y-coordinate.
-     * @param width The width of the object.
-     * @param height The height of the object.
      */
-    public Paddle(double positionX, double positionY, int width, int height) {
-        super(positionX, positionY, width, height);
+    public Paddle() {
+        super(Constants.PADDLE_START_POSITION_X, Constants.PADDLE_START_POSITION_Y, Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT, Constants.PADDLE_TEXTURE_PATH);
         this.setDeltaX(speed);
     }
 
@@ -55,6 +73,8 @@ public class Paddle extends MovableObject {
     @Override
     public void move(double deltaTime) {
 
+        double xMin = Constants.MARGIN_WIDTH;
+        double xMax = xMin + Constants.PLAY_SCREEN_WIDTH;
         double deltaX = 0;
 
         if (keyPressed[KeyCode.RIGHT.getCode()]) {
@@ -68,11 +88,11 @@ public class Paddle extends MovableObject {
 
         double newPositionX = this.getPositionX() + this.getDeltaX();
 
-        if (newPositionX + this.getWidth() > Constants.SCREEN_WIDTH) {
-            newPositionX = Constants.SCREEN_WIDTH - this.getWidth();
+        if (newPositionX + this.getWidth() > xMax) {
+            newPositionX = xMax - this.getWidth();
             this.setDeltaX(0);
-        } else if (newPositionX < 0) {
-            newPositionX = 0;
+        } else if (newPositionX < xMin) {
+            newPositionX = xMin;
             this.setDeltaX(0);
         }
 
@@ -87,8 +107,19 @@ public class Paddle extends MovableObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.RED); // Sau này thay bằng texture sau
-        gc.fillRect(this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
+        gc.drawImage(this.getTexture(), this.getPositionX(), this.getPositionY(), this.getWidth(), this.getHeight());
+    }
+
+    @Override
+    public void reset() {
+        speed = Constants.PADDLE_SPEED;
+        PowerUpType currentPowerUp = PowerUpType.NONE;
+        Arrays.fill(keyPressed, false);
+        this.setDeltaX(speed);
+        this.setPositionX(Constants.PADDLE_START_POSITION_X);
+        this.setPositionY(Constants.PADDLE_START_POSITION_Y);
+        this.setWidth(Constants.PADDLE_WIDTH);
+        this.setHeight(Constants.PADDLE_HEIGHT);
     }
 
     // Getter and Setter method.

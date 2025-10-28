@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Menu.MenuScene">
+    <children>
+
+        <ImageView fx:id="text" fitHeight="79.0" fitWidth="714.0" layoutX="283.0" layoutY="400.0">
+            <image>
+                <Image url="@/images/menuImages/text.png" />
+            </image>
+        </ImageView>
+
+        <ImageView fitHeight="72.0" fitWidth="210.0" layoutX="535.0" layoutY="562.0" onMouseClicked="#startClicked" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@/images/menuImages/start-button.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="72.0" fitWidth="210.0" layoutX="535.0" layoutY="681.0" onMouseClicked="#tutorialClicked" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@/images/menuImages/tutorial-button.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="72.0" fitWidth="210.0" layoutX="535.0" layoutY="797.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@/images/menuImages/shop-button.png" />
+            </image>
+        </ImageView>
+    </children>
+</AnchorPane>

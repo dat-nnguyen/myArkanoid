@@ -8,59 +8,40 @@ import utils.Constants;
 public class BallWithBrick {
 
     public static void checkCollision(Ball ball, Brick brick) {
-
-        if (brick.getIsDestroyed()) {
-            return;
-        }
+        if (brick.getIsDestroyed()) return;
 
         double ballCenterX = ball.getPositionX() + ball.getRadius();
         double ballCenterY = ball.getPositionY() + ball.getRadius();
-        double ballRadius = ball.getRadius();
-        double checkPointX;
-        double checkPointY;
+        double brickCenterX = brick.getPositionX() + brick.getWidth() / 2.0;
+        double brickCenterY = brick.getPositionY() + brick.getHeight() / 2.0;
 
-        // Compute bound x-axis
-        if (ballCenterX < brick.getPositionX()) {
-            checkPointX = brick.getPositionX();
-        } else if (ballCenterX > brick.getPositionX() + brick.getWidth()) {
-            checkPointX = brick.getPositionX() + brick.getWidth();
-        } else {
-            checkPointX = ballCenterX;
-        }
+        double vectorX = ballCenterX - brickCenterX;
+        double vectorY = ballCenterY - brickCenterY;
 
-        // Compute bound y-axis
-        if (ballCenterY < brick.getPositionY()) {
-            checkPointY = brick.getPositionY();
-        } else if (ballCenterY > brick.getPositionY() + brick.getHeight()) {
-            checkPointY = brick.getPositionY() + brick.getHeight();
-        } else {
-            checkPointY = ballCenterY;
-        }
+        double lengthX = brick.getWidth() / 2.0 + ball.getRadius();
+        double lengthY = brick.getHeight() / 2.0 + ball.getRadius();
 
-        // Compute distance to check collision
-        double diffX = checkPointX - ballCenterX;
-        double diffY = checkPointY - ballCenterY;
-        double distance = Math.sqrt(diffX * diffX + diffY * diffY);
+        double overlapX = lengthX - Math.abs(vectorX);
+        double overlapY = lengthY - Math.abs(vectorY);
 
-        //Check distance
-        if (distance <= ballRadius) {
-            double overlap = ballRadius - distance;
-            if (distance > Constants.EPSILON) {
-                double newPositionX = ball.getPositionX() - (diffX / distance) * overlap;
-                double newPositionY = ball.getPositionY() - (diffY / distance) * overlap;
-                ball.setPositionX(newPositionX);
-                ball.setPositionY(newPositionY);
-            }
-            if (Math.abs(Math.abs(diffX) - Math.abs(diffY)) <= Constants.EPSILON) {
-                ball.setDirectionX(ball.getDirectionX() * (-1));
-                ball.setDirectionY(ball.getDirectionY() * (-1));
-            }
-            else if (Math.abs(diffX) > Math.abs(diffY)) {
-                ball.setDirectionX(ball.getDirectionX() * (-1));
+        if (overlapX > 0 && overlapY > 0) {
+            if (Math.abs(overlapX - overlapY) <= Constants.EPSILON) {
+                if (vectorX > 0) ball.setPositionX(ball.getPositionX() + overlapX);
+                else ball.setPositionX(ball.getPositionX() - overlapX);
+                ball.setDirectionX(-ball.getDirectionX());
+                if (vectorY > 0) ball.setPositionY(ball.getPositionY() + overlapY);
+                else ball.setPositionY(ball.getPositionY() - overlapY);
+                ball.setDirectionY(-ball.getDirectionY());
+            } else if (overlapY < overlapX) {
+                if (vectorY > 0) ball.setPositionY(ball.getPositionY() + overlapY);
+                else ball.setPositionY(ball.getPositionY() - overlapY);
+                ball.setDirectionY(-ball.getDirectionY());
             } else {
-                ball.setDirectionY(ball.getDirectionY() * (-1));
+                if (vectorX > 0) ball.setPositionX(ball.getPositionX() + overlapX);
+                else ball.setPositionX(ball.getPositionX() - overlapX);
+                ball.setDirectionX(-ball.getDirectionX());
             }
-            if (brick.getCurrentBrickType() != BrickType.IMPOSSIBLE) brick.setLives(brick.getLives() - 1);
+            if (!brick.getCurrentBrickType().isUnbreakable()) brick.setLives(brick.getLives() - 1);
         }
     }
 }
