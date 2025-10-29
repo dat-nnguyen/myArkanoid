@@ -25,8 +25,8 @@ public class Constants {
     public static final String BALL_TEXTURE_PATH = "/images/gameImages/ball.png";
     public static final String PADDLE_TEXTURE_PATH = "/images/gameImages/paddle.png";
 
-    public static final int POWERUP_WIDTH = 30;
-    public static final int POWERUP_HEIGHT = 30;
+    public static final int POWERUP_WIDTH = 79;
+    public static final int POWERUP_HEIGHT = 34;
     public static final double POWERUP_FALL_SPEED = 200.0;
 
 }
