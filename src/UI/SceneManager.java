@@ -2,6 +2,9 @@ package UI;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Spliterator;
+
+import audio.SoundManager;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import UI.Game.GameScene;
@@ -18,6 +21,8 @@ public class SceneManager {
 
     private GameScene gameSceneInstance;
     private String currentSceneName;
+
+    private final SoundManager soundManager = new SoundManager();
 
     private SceneManager() {} // k cho phep khoi tao obj ben ngoai
 
@@ -69,5 +74,9 @@ public class SceneManager {
             gameSceneInstance.start();
         }
 
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 }

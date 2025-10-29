@@ -2,20 +2,22 @@ package core;
 
 import UI.Game.GameScene;
 import UI.SceneManager;
+import audio.SoundManager;
 import entities.Ball;
 import entities.Brick;
+import entities.BrickType;
 import entities.Paddle;
 import CollisionManager.BallWithPaddle;
 import CollisionManager.BallWithBrick;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import utils.Constants;
 import java.util.ArrayList;
-
 import PowerUpSystem.PowerUpManager;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 // game loop(time line/ animation)
@@ -29,14 +31,15 @@ public class GameLoop extends AnimationTimer {
     private final ArrayList<Brick> brickList;
     private final GraphicsContext gc;
     private final InputHandler input;
-    private long lastTime;
-    private int score = 0;
+    private long lastTime = 0;
+    private final IntegerProperty score = new SimpleIntegerProperty(0);
 
     private final PowerUpManager powerUpManager;
     private final ArrayList<Ball> ballList; // Store multiple balls
 
     public GameLoop(Ball ball, Paddle paddle, ArrayList<Brick> brickList, GraphicsContext gc,
-                    InputHandler input, SceneManager sceneManager, GameScene gameScene) {
+                    InputHandler input, SceneManager sceneManager, GameScene gameScene,
+                    PowerUpManager powerUpManager, ArrayList<Ball> ballList) {
         this.sceneManager = sceneManager;
         this.gameScene = gameScene;
         this.ball = ball;
@@ -44,8 +47,8 @@ public class GameLoop extends AnimationTimer {
         this.brickList = brickList;
         this.gc = gc;
         this.input = input;
-        this.ballList = new ArrayList<>(); // Initialize ball list
-        this.powerUpManager = new PowerUpManager(ball, paddle, ballList);
+        this.ballList = ballList;
+        this.powerUpManager = powerUpManager;
         lastTime = 0;
     }
 
@@ -100,8 +103,14 @@ public class GameLoop extends AnimationTimer {
             if (!brick.getIsDestroyed()) {
                 brick.update(deltaTime);
                 if (brick.getIsDestroyed()) {
-                    score++;
-                    System.out.println("🎯 Score: " + score);
+                    int newScore = score.get() + 1;
+                    if (brick.getCurrentBrickType() == BrickType.MEDIUM) {
+                        newScore += 2;
+                    } else if (brick.getCurrentBrickType() == BrickType.HARD) {
+                        newScore += 4;
+                    }
+                    score.set(newScore);
+                    // System.out.println("🎯 Score: " + score.get());
                 }
             }
 
@@ -157,7 +166,6 @@ public class GameLoop extends AnimationTimer {
             BallWithPaddle.checkCollision(ball, paddle);
             for (Brick brick : brickList) {
                 BallWithBrick.checkCollision(ball, brick);
-                boolean after = brick.getIsDestroyed();
             }
         }
 
@@ -194,11 +202,15 @@ public class GameLoop extends AnimationTimer {
         powerUpManager.render(gc);
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setScore(int value) {
+        score.set(value);
     }
 
     public int getScore() {
+        return score.get();
+    }
+
+    public IntegerProperty getScoreProperty() {
         return score;
     }
 

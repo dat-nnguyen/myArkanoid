@@ -6,17 +6,17 @@
 
 <AnchorPane prefHeight="930.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.GameOver.GameOverScene">
     <children>
-        <ImageView fitHeight="930.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="930.0" fitWidth="1280.0" preserveRatio="true">
             <image>
                 <Image url="@/images/GameOverImages/game-over.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="57.0" fitWidth="330.0" layoutX="494.0" layoutY="510.0" onMouseClicked="#restartGame" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="57.0" fitWidth="330.0" layoutX="494.0" layoutY="510.0" onMouseClicked="#restartGame" preserveRatio="true">
             <image>
                 <Image url="@/images/GameOverImages/playAgain.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="57.0" fitWidth="330.0" layoutX="494.0" layoutY="616.0" onMouseClicked="#ExitToMenu" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="57.0" fitWidth="330.0" layoutX="494.0" layoutY="616.0" onMouseClicked="#ExitToMenu" preserveRatio="true">
             <image>
                 <Image url="@/images/GameOverImages/quit.png" />
             </image>

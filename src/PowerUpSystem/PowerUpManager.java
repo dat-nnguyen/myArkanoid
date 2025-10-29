@@ -1,8 +1,14 @@
 package PowerUpSystem;
 
+import UI.SceneManager;
+import audio.SoundManager;
 import entities.Ball;
 import entities.Brick;
 import entities.Paddle;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +27,8 @@ public class PowerUpManager {
     private final PowerUpContext context;
     private final Random random;
 
+    private final ObservableMap<PowerUpType, DoubleProperty> activePowerUpCredits;
+
     private double spawnChance = 0.3;
 
     // Track original values to prevent stacking
@@ -32,6 +40,7 @@ public class PowerUpManager {
         this.activeEffects = new HashMap<>(); // Type → Effect mapping
         this.context = new PowerUpContext(ball, paddle, ballList);
         this.random = new Random();
+        this.activePowerUpCredits = FXCollections.observableHashMap();
     }
 
     public void trySpawnPowerUp(Brick brick) {
@@ -96,6 +105,18 @@ public class PowerUpManager {
                 System.out.println("⏱️ Power-up effect ended: " + entry.getKey());
             }
         }
+
+        Iterator<ObservableMap.Entry<PowerUpType, DoubleProperty>> iterator = activePowerUpCredits.entrySet().iterator();
+        while (iterator.hasNext()) {
+            ObservableMap.Entry<PowerUpType, DoubleProperty> entry = iterator.next();
+            DoubleProperty timer = entry.getValue();
+            double newTime = timer.get() - deltaTime;
+            if (newTime <= 0) {
+                iterator.remove();
+            } else {
+                timer.set(newTime);
+            }
+        }
     }
 
     public void checkCollision(Paddle paddle) {
@@ -109,7 +130,9 @@ public class PowerUpManager {
                     paddle.getPositionY() + paddle.getHeight() >= powerUp.getPositionY();
 
             if (collisionX && collisionY) {
+                SceneManager.getInstance().getSoundManager().play("power");
                 collectPowerUp(powerUp);
+                updateCredits(powerUp.getType(), powerUp.getType().getDuration());
             }
         }
     }
@@ -218,6 +241,7 @@ public class PowerUpManager {
         activeEffects.clear();
         originalPaddleWidth = null;
         originalBallSpeed = null;
+        activePowerUpCredits.clear();
     }
 
     private static class ActiveEffect {
@@ -232,10 +256,21 @@ public class PowerUpManager {
         }
     }
 
+    private void updateCredits(PowerUpType type, double duration) {
+        if (activePowerUpCredits.containsKey(type)) {
+            activePowerUpCredits.get(type).set(duration);
+        } else {
+            activePowerUpCredits.put(type, new SimpleDoubleProperty(duration));
+        }
+    }
+
     // Getters
     public double getSpawnChance() { return spawnChance; }
     public void setSpawnChance(double spawnChance) {
         this.spawnChance = Math.max(0.0, Math.min(1.0, spawnChance));
     }
     public ArrayList<PowerUp> getActivePowerUps() { return activePowerUps; }
+    public ObservableMap<PowerUpType, DoubleProperty> getActivePowerUpCredits() {
+        return activePowerUpCredits;
+    }
 }

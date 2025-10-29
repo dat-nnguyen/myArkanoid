@@ -2,6 +2,7 @@ package UI.Menu;
 
 import UI.SceneManager;
 import UI.Game.GameScene;
+import audio.SoundManager;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -12,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+import utils.Constants;
+
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -55,19 +58,17 @@ public class MenuScene implements Initializable {
             ImageView imgViewA = new ImageView(img);
             ImageView imgViewB = new ImageView(img);
 
-            double IMAGE_WIDTH = 1280.0;
-            double IMAGE_HEIGHT = 930.0;
-            imgViewA.setFitWidth(IMAGE_WIDTH);
-            imgViewA.setFitHeight(IMAGE_HEIGHT);
-            imgViewB.setFitWidth(IMAGE_WIDTH);
-            imgViewB.setFitHeight(IMAGE_HEIGHT);
+            imgViewA.setFitWidth(Constants.SCREEN_WIDTH);
+            imgViewA.setFitHeight(Constants.SCREEN_HEIGHT);
+            imgViewB.setFitWidth(Constants.SCREEN_WIDTH);
+            imgViewB.setFitHeight(Constants.SCREEN_HEIGHT);
 
             HBox layerHBox = new HBox(imgViewA, imgViewB);
             rootPane.getChildren().add(i, layerHBox);
 
             TranslateTransition tt = new TranslateTransition(Duration.seconds(speed), layerHBox);
             tt.setFromX(0);
-            tt.setToX(-IMAGE_WIDTH);
+            tt.setToX(-Constants.SCREEN_WIDTH);
             tt.setInterpolator(Interpolator.LINEAR);
             tt.setCycleCount(Animation.INDEFINITE);
             tt.play();
@@ -76,14 +77,14 @@ public class MenuScene implements Initializable {
 
     @FXML
     public void startClicked() {
-        System.out.println("Start Clicked");
-
+        SceneManager.getInstance().getSoundManager().play("click");
         SceneManager sm = SceneManager.getInstance();
+        System.out.println("Start Clicked");
 
         if (!isGameInitialized) {
             System.out.println("Đang khởi tạo Game...");
 
-            GameScene gameInstance = new GameScene(sm);
+            GameScene gameInstance = new GameScene();
 
             sm.addGameScene("Game", gameInstance);
 
@@ -93,16 +94,18 @@ public class MenuScene implements Initializable {
         } else {
             System.out.println("Game đã được tạo !");
         }
-
         sm.switchTo("Game");
     }
 
     public void tutorialClicked() {
+        SceneManager.getInstance().getSoundManager().play("click");
         SceneManager sm = SceneManager.getInstance();
         sm.switchTo("Tutorial");
     }
 
-    public void clickShop() {
+    public void shopClicked() {
+        SceneManager.getInstance().getSoundManager().play("click");
         // (code...)
     }
+
 }

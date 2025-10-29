@@ -1,36 +1,57 @@
 package UI.Game;
 
+import PowerUpSystem.PowerUpManager;
+import PowerUpSystem.PowerUpType;
 import RenderManager.RenderMap;
 import UI.SceneManager;
+import audio.SoundManager;
 import core.GameLoop;
 import core.InputHandler;
 import entities.Ball;
 import entities.Brick;
 import entities.Paddle;
+
+// --- CÁC IMPORT BẮT BUỘC PHẢI THÊM ---
+import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map; // <-- Thêm import này
 
 public class GameScene {
 
-    private final SceneManager sceneManager;
+    private final SceneManager sceneManager = SceneManager.getInstance();
 
-    private Scene scene;
+    private final Scene scene;
     private final GameLoop gameLoop;
 
     private final Ball ball;
     private final Paddle paddle;
     private final ArrayList<Brick> brickList;
-    private GraphicsContext gc;
+    private final GraphicsContext gc;
     private int currentLevel = 1;
+
+    private final PowerUpManager powerUpManager;
+    private final Map<PowerUpType, Node> powerUpUIMap = new HashMap<>();
 
     @FXML
     private ImageView pauseButton;
@@ -42,11 +63,21 @@ public class GameScene {
     private ImageView heart2;
     @FXML
     private ImageView heart3;
+    @FXML
+    private Label scoreLabel;
+    @FXML
+    private VBox boxOfCredits;
+    @FXML
+    private ScrollPane credits;
 
-    private ArrayList<ImageView> heartIcons;
 
-    public GameScene(SceneManager sceneManager) {
-        this.sceneManager = sceneManager;
+    public GameScene() {
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/fonts/AGENCYB.TTF"), 1);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
         Canvas canvas = new Canvas(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         gc = canvas.getGraphicsContext2D();
         RenderMap renderMap = new RenderMap();
@@ -54,7 +85,9 @@ public class GameScene {
         paddle = new Paddle();
         ball = new Ball();
         InputHandler input = new InputHandler();
-        gameLoop = new GameLoop(ball, paddle, brickList, gc, input, sceneManager, this);
+        ArrayList<Ball> ballList = new ArrayList<>(); // Giả sử bạn cần cái này
+        powerUpManager = new PowerUpManager(ball, paddle, ballList);
+        gameLoop = new GameLoop(ball, paddle, brickList, gc, input, sceneManager, this, powerUpManager, ballList);
 
         AnchorPane root;
         try {
@@ -62,19 +95,6 @@ public class GameScene {
             loader.setController(this);
             root = loader.load();
             root.getChildren().add(1, canvas);
-
-            pauseButton.setOnMouseClicked(event -> {
-                System.out.println("Bấm Pause!");
-                gameLoop.stop();
-                sceneManager.switchTo("Pause");
-            });
-
-            exitButton.setOnMouseClicked(event -> {
-                System.out.println("Bấm Exit!");
-                gameLoop.stop();
-                sceneManager.switchTo("Menu");
-            });
-
         } catch (IOException e) {
             System.err.println(e.getMessage());
             root = new AnchorPane(canvas);
@@ -83,13 +103,55 @@ public class GameScene {
         input.getKey(scene);
     }
 
+    @FXML
+    public void initialize() {
+        scoreLabel.textProperty().bind(gameLoop.getScoreProperty().asString("%d"));
+
+        boxOfCredits.prefWidthProperty().bind(credits.widthProperty().subtract(15));
+
+        powerUpManager.getActivePowerUpCredits().addListener(
+                (MapChangeListener<PowerUpType, DoubleProperty>) change -> {
+                    Platform.runLater(() -> {
+                        if (change.wasAdded()) {
+                            createPowerUpUI(change.getKey(), change.getValueAdded());
+                        } else if (change.wasRemoved()) {
+                            removePowerUpUI(change.getKey());
+                        }
+                    });
+                });
+    }
+
+    private void createPowerUpUI(PowerUpType type, DoubleProperty timer) {
+        Label nameLabel = new Label(type.getName());
+        nameLabel.setTextFill(Color.WHITE);
+        nameLabel.setFont(Font.font("Agency FB", 20));
+
+        Label timerLabel = new Label();
+        timerLabel.setTextFill(Color.YELLOW);
+        timerLabel.setFont(Font.font("Agency FB", 20));
+
+        timerLabel.textProperty().bind(timer.asString("%.1fs")); // Format "xx.xs"
+
+        HBox row = new HBox(20, nameLabel, timerLabel);
+        row.setAlignment(Pos.CENTER);
+
+        powerUpUIMap.put(type, row);
+        boxOfCredits.getChildren().add(row);
+    }
+
+    private void removePowerUpUI(PowerUpType type) {
+        Node nodeToRemove = powerUpUIMap.remove(type);
+        if (nodeToRemove != null) {
+            boxOfCredits.getChildren().remove(nodeToRemove);
+        }
+    }
+
     public Scene getScene() {
         return scene;
     }
 
     public void start() {
         reset();
-        System.out.println("\uD83C\uDFAF Score: " + gameLoop.getScore());
         gameLoop.start();
     }
 
@@ -98,11 +160,12 @@ public class GameScene {
     }
 
     public void reset() {
+        SceneManager.getInstance().getSoundManager().play("play");
         gameLoop.setScore(0);
         ball.reset();
         paddle.reset();
         brickList.clear();
-        gameLoop.getPowerUpManager().reset(); // Reset power-ups
+        gameLoop.getPowerUpManager().reset();
         RenderMap rendermap = new RenderMap();
         rendermap.render(currentLevel, brickList);
         updateLivesUI();
@@ -113,13 +176,24 @@ public class GameScene {
 
     public void goToNextLevel() {
         gameLoop.stop();
-        currentLevel ++;
+        currentLevel++;
         final int MAX_LEVEL = 15;
         if (currentLevel > MAX_LEVEL) {
             System.out.println("thang me may roi");
             sceneManager.switchTo("Win");
         } else {
-            start();
+            SceneManager.getInstance().getSoundManager().play("play");
+            ball.reset();
+            paddle.reset();
+            brickList.clear();
+            gameLoop.getPowerUpManager().reset();
+            RenderMap rendermap = new RenderMap();
+            rendermap.render(currentLevel, brickList);
+            updateLivesUI();
+            heart1.setVisible(true);
+            heart2.setVisible(true);
+            heart3.setVisible(true);
+            gameLoop.start();
         }
     }
 
@@ -131,6 +205,22 @@ public class GameScene {
         if (ball.getLives() == 2) heart3.setVisible(false);
         if (ball.getLives() == 1) heart2.setVisible(false);
         if (ball.getLives() == 0) heart1.setVisible(false);
+    }
+
+    @FXML
+    public void pauseClicked() {
+        SceneManager.getInstance().getSoundManager().play("click");
+        System.out.println("Bấm Pause!");
+        gameLoop.stop();
+        sceneManager.switchTo("Pause");
+    }
+
+    @FXML
+    public void exitClicked() {
+        SceneManager.getInstance().getSoundManager().play("click");
+        System.out.println("Bấm Exit!");
+        gameLoop.stop();
+        sceneManager.switchTo("Menu");
     }
 
 }

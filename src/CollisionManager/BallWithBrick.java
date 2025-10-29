@@ -1,5 +1,7 @@
 package CollisionManager;
 
+import UI.SceneManager;
+import audio.SoundManager;
 import entities.Ball;
 import entities.Brick;
 import entities.BrickType;
@@ -25,6 +27,7 @@ public class BallWithBrick {
         double overlapY = lengthY - Math.abs(vectorY);
 
         if (overlapX > 0 && overlapY > 0) {
+            SceneManager.getInstance().getSoundManager().play("hit");
             if (Math.abs(overlapX - overlapY) <= Constants.EPSILON) {
                 if (vectorX > 0) ball.setPositionX(ball.getPositionX() + overlapX);
                 else ball.setPositionX(ball.getPositionX() - overlapX);

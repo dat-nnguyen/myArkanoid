@@ -1,5 +1,7 @@
 package entities;
 
+import UI.SceneManager;
+import audio.SoundManager;
 import javafx.scene.image.Image;
 import utils.Constants;
 import core.MovableObject;
@@ -66,18 +68,22 @@ public class Ball extends MovableObject {
         double newPositionY = this.getPositionY() + this.getDeltaY();
 
         if (newPositionX + this.getWidth() > xMax) {
+            SceneManager.getInstance().getSoundManager().play("hit");
             newPositionX = xMax - this.getWidth();
             directionX *= -1;
         } else if (newPositionX < xMin) {
+            SceneManager.getInstance().getSoundManager().play("hit");
             newPositionX = xMin;
             directionX *= -1;
         }
 
         if (newPositionY < yMin) {
+            SceneManager.getInstance().getSoundManager().play("hit");
             newPositionY = yMin;
             directionY *= -1;
         } else if (newPositionY > yMax + 20) {
             // Ball rơi xuống dưới
+            SceneManager.getInstance().getSoundManager().play("dead");
             lives -= 1;
             play = false;
             System.out.println("⚽ Remaining lives: " + lives);
@@ -100,7 +106,6 @@ public class Ball extends MovableObject {
     @Override
     public void update(double deltaTime) {
         if (lives > 0 && play) move(deltaTime);
-        //Update power-up sau...
     }
 
     @Override
