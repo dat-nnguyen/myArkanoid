@@ -62,7 +62,7 @@ public class GameLoop extends AnimationTimer {
         gc.strokeRect(Constants.MARGIN_WIDTH, Constants.MARGIN_HEIGHT,
                 Constants.PLAY_SCREEN_WIDTH, Constants.PLAY_SCREEN_HEIGHT);
 
-        gameScene.updateLivesUI(ball.getLives());
+        gameScene.updateLivesUI();
 
         // GAME OVER: Ball chính hết mạng VÀ không còn extra balls
         if (ball.getLives() <= 0 && ballList.isEmpty()) {
@@ -157,6 +157,7 @@ public class GameLoop extends AnimationTimer {
             BallWithPaddle.checkCollision(ball, paddle);
             for (Brick brick : brickList) {
                 BallWithBrick.checkCollision(ball, brick);
+                boolean after = brick.getIsDestroyed();
             }
         }
 

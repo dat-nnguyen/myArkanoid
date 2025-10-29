@@ -105,7 +105,7 @@ public class GameScene {
         gameLoop.getPowerUpManager().reset(); // Reset power-ups
         RenderMap rendermap = new RenderMap();
         rendermap.render(currentLevel, brickList);
-        updateLivesUI(3);
+        updateLivesUI();
         heart1.setVisible(true);
         heart2.setVisible(true);
         heart3.setVisible(true);
@@ -127,10 +127,10 @@ public class GameScene {
         this.currentLevel = currentLevel;
     }
 
-    public void updateLivesUI(int currentLives) {
-        if (currentLives == 2) heart3.setVisible(false);
-        if (currentLives == 1) heart2.setVisible(false);
-        if (currentLives == 0) heart1.setVisible(false);
+    public void updateLivesUI() {
+        if (ball.getLives() == 2) heart3.setVisible(false);
+        if (ball.getLives() == 1) heart2.setVisible(false);
+        if (ball.getLives() == 0) heart1.setVisible(false);
     }
 
 }

@@ -21,7 +21,7 @@ public class PowerUpManager {
     private final PowerUpContext context;
     private final Random random;
 
-    private double spawnChance = 1.0;
+    private double spawnChance = 0.3;
 
     // Track original values to prevent stacking
     private Integer originalPaddleWidth = null;
