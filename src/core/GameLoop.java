@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import PowerUpSystem.PowerUpManager;
 import java.util.Iterator;
 
-// game loop(time line/ animation)
+/**
+ * Game loop with FIXED multi-ball lives logic.
+ */
 public class GameLoop extends AnimationTimer {
 
     private final SceneManager sceneManager;
@@ -35,7 +37,7 @@ public class GameLoop extends AnimationTimer {
     private final IntegerProperty score = new SimpleIntegerProperty(0);
 
     private final PowerUpManager powerUpManager;
-    private final ArrayList<Ball> ballList; // Store multiple balls
+    private final ArrayList<Ball> ballList;
 
     public GameLoop(Ball ball, Paddle paddle, ArrayList<Brick> brickList, GraphicsContext gc,
                     InputHandler input, SceneManager sceneManager, GameScene gameScene,
@@ -67,7 +69,7 @@ public class GameLoop extends AnimationTimer {
 
         gameScene.updateLivesUI();
 
-        // GAME OVER: Ball chính hết mạng VÀ không còn extra balls
+        // GAME OVER: Main ball out of lives AND no extra balls
         if (ball.getLives() <= 0 && ballList.isEmpty()) {
             sceneManager.switchTo("GameOver");
             this.stop();
@@ -91,7 +93,7 @@ public class GameLoop extends AnimationTimer {
         paddle.setKeyPressed(KeyCode.LEFT, input.isLeftPressed());
         paddle.setKeyPressed(KeyCode.RIGHT, input.isRightPressed());
 
-        // SPACE chỉ launch ball chính nếu nó còn sống
+        // SPACE launches main ball if it has lives and not playing
         if (input.isSpacePressed() && ball.getLives() > 0 && !ball.play) {
             ball.play = true;
         }
@@ -110,7 +112,6 @@ public class GameLoop extends AnimationTimer {
                         newScore += 4;
                     }
                     score.set(newScore);
-                    // System.out.println("🎯 Score: " + score.get());
                 }
             }
 
@@ -119,38 +120,44 @@ public class GameLoop extends AnimationTimer {
             }
         }
 
-        // Update main ball (CHỈ KHI còn lives)
+        // Update main ball (if has lives)
         if (ball.getLives() > 0) {
             ball.update(deltaTime);
         }
 
-        // Update extra balls và xóa những ball hết mạng
+        // Update extra balls and remove dead ones
         Iterator<Ball> ballIterator = ballList.iterator();
         while (ballIterator.hasNext()) {
             Ball extraBall = ballIterator.next();
             extraBall.update(deltaTime);
 
-            // Remove extra ball khi hết mạng
+            // Remove extra ball when it dies
             if (extraBall.getLives() <= 0) {
                 System.out.println("⚽ Extra ball removed from game");
                 ballIterator.remove();
             }
         }
 
-        // Chỉ respawn ball chính khi:
-        // 1. Ball chính còn lives (lives > 0)
-        // 2. Ball chính không đang play (đã rơi xuống)
-        // 3. KHÔNG còn extra balls nào
-        // 4. Ball đã ở dưới màn hình
-        if (ball.getLives() > 0 && !ball.play && ballList.isEmpty()) {
-            // Check if ball is below screen (đã rơi xuống)
-            if (ball.getPositionY() > Constants.SCREEN_HEIGHT - 200) {
-                // Reset ball về vị trí spawn
+        // === KEY CHANGE: NEW LIVES LOGIC ===
+        // Check if ALL balls have fallen (main + extras)
+        boolean mainBallFell = ball.getLives() > 0 && !ball.play &&
+                ball.getPositionY() > Constants.SCREEN_HEIGHT - 200;
+        boolean noExtraBalls = ballList.isEmpty();
+
+        if (mainBallFell && noExtraBalls) {
+            // ALL balls fell → Decrement player lives
+            ball.setLives(ball.getLives() - 1);
+            System.out.println("💔 All balls fell! Lives remaining: " + ball.getLives());
+
+            if (ball.getLives() > 0) {
+                // Respawn main ball
                 ball.setPositionX(Constants.BALL_START_POSITION_X);
                 ball.setPositionY(Constants.BALL_START_POSITION_Y);
                 ball.setDirectionX(0.0);
                 ball.setDirectionY(1.0);
                 System.out.println("⚽ Ball respawned! Lives remaining: " + ball.getLives());
+            } else {
+                System.out.println("💀 Game Over!");
             }
         }
 
@@ -161,7 +168,7 @@ public class GameLoop extends AnimationTimer {
     }
 
     private void checkCollision() {
-        // Main ball collisions (CHỈ KHI còn lives)
+        // Main ball collisions (only if has lives)
         if (ball.getLives() > 0) {
             BallWithPaddle.checkCollision(ball, paddle);
             for (Brick brick : brickList) {
@@ -182,7 +189,7 @@ public class GameLoop extends AnimationTimer {
     }
 
     private void render() {
-        // Render main ball (CHỈ KHI còn lives)
+        // Render main ball (only if has lives)
         if (ball.getLives() > 0) {
             ball.render(gc);
         }
@@ -217,5 +224,4 @@ public class GameLoop extends AnimationTimer {
     public PowerUpManager getPowerUpManager() {
         return powerUpManager;
     }
-
 }

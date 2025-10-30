@@ -29,7 +29,7 @@ public class PowerUpManager {
 
     private final ObservableMap<PowerUpType, DoubleProperty> activePowerUpCredits;
 
-    private double spawnChance = 0.3;
+    private double spawnChance = 0.4;//spawn chance
 
     // Track original values to prevent stacking
     private Integer originalPaddleWidth = null;

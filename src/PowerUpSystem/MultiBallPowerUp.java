@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Creates additional balls (no duration - instant effect).
- * FIXED: Extra balls have only 1 life and disappear when fall.
+ * FIXED: Extra balls are marked as non-main balls.
  */
 public class MultiBallPowerUp extends PowerUp {
 
@@ -19,19 +19,19 @@ public class MultiBallPowerUp extends PowerUp {
         Ball originalBall = context.getBall();
         ArrayList<Ball> ballList = context.getBallList();
 
-        // Tìm ball đang chơi (có thể là main ball hoặc extra ball)
+        // Find active ball
         Ball activeBall = null;
 
-        // Ưu tiên: Tìm ball chính nếu đang chơi
+        // Priority: Main ball if playing
         if (originalBall.getLives() > 0 && originalBall.play) {
             activeBall = originalBall;
         }
-        // Nếu không, lấy extra ball đầu tiên
+        // Otherwise: First extra ball
         else if (!ballList.isEmpty()) {
             activeBall = ballList.get(0);
         }
 
-        // Nếu KHÔNG có ball nào đang active → Không spawn multi-ball
+        // No active ball → Cancel multi-ball
         if (activeBall == null) {
             System.out.println("⚠️ Multi-ball cancelled: No active balls!");
             return;
@@ -41,10 +41,14 @@ public class MultiBallPowerUp extends PowerUp {
         for (int i = 0; i < 2; i++) {
             Ball newBall = new Ball();
 
-            // Copy position and speed từ ACTIVE BALL
+            // Copy position and speed from active ball
             newBall.setPositionX(activeBall.getPositionX());
             newBall.setPositionY(activeBall.getPositionY());
             newBall.setSpeed(activeBall.getSpeed());
+
+            // === KEY CHANGE ===
+            // Mark as extra ball (NOT main ball)
+            newBall.setMainBall(false);
 
             // Extra balls have ONLY 1 life
             newBall.setLives(1);
