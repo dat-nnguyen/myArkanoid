@@ -99,6 +99,7 @@ public class GameScene {
         }
         scene = new Scene(root, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         input.getKey(scene);
+
     }
 
     @FXML
@@ -177,7 +178,6 @@ public class GameScene {
         currentLevel++;
         final int MAX_LEVEL = 15;
         if (currentLevel > MAX_LEVEL) {
-            System.out.println("thang me may roi");
             sceneManager.switchTo("Win");
         } else {
             SceneManager.getInstance().getSoundManager().play("play");

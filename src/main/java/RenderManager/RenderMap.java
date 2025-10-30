@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class RenderMap {
 
-    private final String startPath = "src/RenderManager/MapList/";
+    private final String startPath = "MapList";
     private final String endPath = ".txt";
 
     public RenderMap() {

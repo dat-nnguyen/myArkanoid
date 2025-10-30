@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven.apache.org.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.yourcompany</groupId>
     <artifactId>ARKARNOID_PROJECT</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- ✅ Cấu hình Java 17 trở lên và JavaFX 25 -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <javafx.version>17.0.6</javafx.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <javafx.version>25</javafx.version>
     </properties>
 
+    <!-- ✅ Thư viện JavaFX đầy đủ -->
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
@@ -33,11 +38,19 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- ✅ Thêm JUnit cho test -->
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -46,27 +59,37 @@
         </dependency>
     </dependencies>
 
+    <!-- ✅ Plugin build & JavaFX run -->
     <build>
         <plugins>
+
+            <!-- Plugin biên dịch -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.1</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
 
+            <!-- Plugin chạy JavaFX -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>core.Main</mainClass>
+                    <mainClass>Main</mainClass>
+
+                    <options>
+                        <option>--enable-native-access=ALL-UNNAMED</option>
+                        <option>--add-opens=javafx.graphics/com.sun.javafx.tk.quantum=ALL-UNNAMED</option>
+                        <option>--add-opens=javafx.base/com.sun.javafx=ALL-UNNAMED</option>
+                    </options>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
-
 </project>
