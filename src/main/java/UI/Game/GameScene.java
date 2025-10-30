@@ -4,14 +4,12 @@ import PowerUpSystem.PowerUpManager;
 import PowerUpSystem.PowerUpType;
 import RenderManager.RenderMap;
 import UI.SceneManager;
-import audio.SoundManager;
 import core.GameLoop;
 import core.InputHandler;
 import entities.Ball;
 import entities.Brick;
 import entities.Paddle;
 
-// --- CÁC IMPORT BẮT BUỘC PHẢI THÊM ---
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.MapChangeListener;
@@ -35,7 +33,7 @@ import utils.Constants;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map; // <-- Thêm import này
+import java.util.Map;
 
 public class GameScene {
 
@@ -91,7 +89,7 @@ public class GameScene {
 
         AnchorPane root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UI/Game/GameScene.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameScene.fxml"));
             loader.setController(this);
             root = loader.load();
             root.getChildren().add(1, canvas);

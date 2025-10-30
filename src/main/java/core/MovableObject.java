@@ -1,7 +1,5 @@
 package core;
 
-import javafx.scene.image.Image;
-
 /**
  * Moving object management.
  *

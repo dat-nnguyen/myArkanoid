@@ -1,4 +1,3 @@
-import UI.Game.GameScene;
 import UI.SceneManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,15 +22,15 @@ public class Main extends Application {
         sm.setPrimaryStage(primaryStage);
 
         // tai menu (fxml)
-        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/UI/Menu/MenuScene.fxml"));
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("MenuScene.fxml"));
         Pane menuRoot = menuLoader.load();
         sm.addScene("Menu", new Scene(menuRoot));
 
-        FXMLLoader tutorialLoader = new FXMLLoader(getClass().getResource("/UI/Tutorial/TutorialScene.fxml"));
+        FXMLLoader tutorialLoader = new FXMLLoader(getClass().getResource("TutorialScene.fxml"));
         Pane tutorialRoot = tutorialLoader.load();
         sm.addScene("Tutorial", new Scene(tutorialRoot));
 
-        FXMLLoader gameOverLoader = new FXMLLoader(getClass().getResource("/UI/GameOver/GameOverScene.fxml"));
+        FXMLLoader gameOverLoader = new FXMLLoader(getClass().getResource("GameOverScene.fxml"));
         Pane gameOverRoot = gameOverLoader.load();
         sm.addScene("GameOver", new Scene(gameOverRoot));
 
