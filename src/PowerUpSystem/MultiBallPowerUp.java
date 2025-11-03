@@ -1,14 +1,13 @@
 package PowerUpSystem;
 
-import audio.SoundManager;
 import entities.Ball;
 import java.util.ArrayList;
 
 /**
- * Creates additional balls (no duration - instant effect).
- * FIXED: Extra balls are marked as non-main balls.
+ * Creates additional balls (instant effect, no duration).
+ * Extra balls are marked as non-main balls.
  */
-public class MultiBallPowerUp extends PowerUp {
+public class MultiBallPowerUp extends InstantPowerUp {
 
     public MultiBallPowerUp(double positionX, double positionY) {
         super(positionX, positionY, PowerUpType.MULTI_BALL);
@@ -37,8 +36,8 @@ public class MultiBallPowerUp extends PowerUp {
             return;
         }
 
-        // Create 2 additional balls with different angles
-        for (int i = 0; i < 2; i++) {
+        // Create N additional balls with different angles
+        for (int i = 0; i < PowerUpConfig.MULTI_BALL_COUNT; i++) {
             Ball newBall = new Ball();
 
             // Copy position and speed from active ball
@@ -46,7 +45,6 @@ public class MultiBallPowerUp extends PowerUp {
             newBall.setPositionY(activeBall.getPositionY());
             newBall.setSpeed(activeBall.getSpeed());
 
-            // === KEY CHANGE ===
             // Mark as extra ball (NOT main ball)
             newBall.setMainBall(false);
 
@@ -57,7 +55,8 @@ public class MultiBallPowerUp extends PowerUp {
             newBall.play = true;
 
             // Set different direction (-30° and +30° from vertical)
-            double angle = Math.PI / 2 + (i == 0 ? -Math.PI / 6 : Math.PI / 6);
+            double angle = Math.PI / 2 +
+                    (i == 0 ? -PowerUpConfig.MULTI_BALL_ANGLE_OFFSET : PowerUpConfig.MULTI_BALL_ANGLE_OFFSET);
             newBall.setDirectionX(Math.cos(angle));
             newBall.setDirectionY(-Math.sin(angle));
 
@@ -67,10 +66,5 @@ public class MultiBallPowerUp extends PowerUp {
         }
 
         System.out.println("🟡 Multi-ball activated! Total balls: " + (ballList.size() + 1));
-    }
-
-    @Override
-    public void removeEffect(PowerUpContext context) {
-        // Multi-ball has no removal effect (instant permanent)
     }
 }

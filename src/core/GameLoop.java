@@ -21,7 +21,8 @@ import PowerUpSystem.PowerUpManager;
 import java.util.Iterator;
 
 /**
- * Game loop with FIXED multi-ball lives logic.
+ * Game loop with multi-ball lives logic and time scale support.
+ * UPDATED: Added timeScale for SlowMotion power-up
  */
 public class GameLoop extends AnimationTimer {
 
@@ -39,6 +40,9 @@ public class GameLoop extends AnimationTimer {
     private final PowerUpManager powerUpManager;
     private final ArrayList<Ball> ballList;
 
+    // === NEW: Time scale for slow motion ===
+    private double timeScale = 1.0; // 1.0 = normal, 0.5 = slow motion
+
     public GameLoop(Ball ball, Paddle paddle, ArrayList<Brick> brickList, GraphicsContext gc,
                     InputHandler input, SceneManager sceneManager, GameScene gameScene,
                     PowerUpManager powerUpManager, ArrayList<Ball> ballList) {
@@ -52,6 +56,9 @@ public class GameLoop extends AnimationTimer {
         this.ballList = ballList;
         this.powerUpManager = powerUpManager;
         lastTime = 0;
+
+        // === NEW: Set GameLoop reference in PowerUpManager ===
+        powerUpManager.setGameLoop(this);
     }
 
     @Override
@@ -60,7 +67,11 @@ public class GameLoop extends AnimationTimer {
         double secondStandard = 1000000000.0;
         double deltaTime = (now - lastTime) / secondStandard;
         lastTime = now;
-        update(deltaTime);
+
+        // === NEW: Apply time scale (for slow motion) ===
+        double scaledDeltaTime = deltaTime * timeScale;
+
+        update(scaledDeltaTime);
 
         gc.setStroke(Color.CRIMSON);
         gc.setLineWidth(2);
@@ -138,8 +149,7 @@ public class GameLoop extends AnimationTimer {
             }
         }
 
-        // === KEY CHANGE: NEW LIVES LOGIC ===
-        // Check if ALL balls have fallen (main + extras)
+        // === Check if ALL balls have fallen ===
         boolean mainBallFell = ball.getLives() > 0 && !ball.play &&
                 ball.getPositionY() > Constants.SCREEN_HEIGHT - 200;
         boolean noExtraBalls = ballList.isEmpty();
@@ -209,6 +219,8 @@ public class GameLoop extends AnimationTimer {
         powerUpManager.render(gc);
     }
 
+    // === Getters and Setters ===
+
     public void setScore(int value) {
         score.set(value);
     }
@@ -223,5 +235,15 @@ public class GameLoop extends AnimationTimer {
 
     public PowerUpManager getPowerUpManager() {
         return powerUpManager;
+    }
+
+    // === NEW: Time scale control (for slow motion) ===
+    public double getTimeScale() {
+        return timeScale;
+    }
+
+    public void setTimeScale(double timeScale) {
+        this.timeScale = Math.max(0.1, Math.min(2.0, timeScale)); // Clamp 0.1-2.0
+        System.out.println("⏱️ Time scale changed: " + this.timeScale);
     }
 }

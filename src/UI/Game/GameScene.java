@@ -11,7 +11,6 @@ import entities.Ball;
 import entities.Brick;
 import entities.Paddle;
 
-// --- CÁC IMPORT BẮT BUỘC PHẢI THÊM ---
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.MapChangeListener;
@@ -35,7 +34,7 @@ import utils.Constants;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map; // <-- Thêm import này
+import java.util.Map;
 
 public class GameScene {
 
@@ -85,7 +84,7 @@ public class GameScene {
         paddle = new Paddle();
         ball = new Ball();
         InputHandler input = new InputHandler();
-        ArrayList<Ball> ballList = new ArrayList<>(); // Giả sử bạn cần cái này
+        ArrayList<Ball> ballList = new ArrayList<>();
         powerUpManager = new PowerUpManager(ball, paddle, ballList);
         gameLoop = new GameLoop(ball, paddle, brickList, gc, input, sceneManager, this, powerUpManager, ballList);
 
@@ -130,7 +129,7 @@ public class GameScene {
         timerLabel.setTextFill(Color.YELLOW);
         timerLabel.setFont(Font.font("Agency FB", 20));
 
-        timerLabel.textProperty().bind(timer.asString("%.1fs")); // Format "xx.xs"
+        timerLabel.textProperty().bind(timer.asString("%.1fs"));
 
         HBox row = new HBox(20, nameLabel, timerLabel);
         row.setAlignment(Pos.CENTER);
@@ -169,9 +168,6 @@ public class GameScene {
         RenderMap rendermap = new RenderMap();
         rendermap.render(currentLevel, brickList);
         updateLivesUI();
-        heart1.setVisible(true);
-        heart2.setVisible(true);
-        heart3.setVisible(true);
     }
 
     public void goToNextLevel() {
@@ -190,9 +186,6 @@ public class GameScene {
             RenderMap rendermap = new RenderMap();
             rendermap.render(currentLevel, brickList);
             updateLivesUI();
-            heart1.setVisible(true);
-            heart2.setVisible(true);
-            heart3.setVisible(true);
             gameLoop.start();
         }
     }
@@ -201,10 +194,20 @@ public class GameScene {
         this.currentLevel = currentLevel;
     }
 
+    /**
+     * Update lives UI based on current ball lives.
+     * UPDATED: Now shows hearts when lives are gained back.
+     */
     public void updateLivesUI() {
-        if (ball.getLives() == 2) heart3.setVisible(false);
-        if (ball.getLives() == 1) heart2.setVisible(false);
-        if (ball.getLives() == 0) heart1.setVisible(false);
+        int lives = ball.getLives();
+
+        // Show/hide hearts based on current lives
+        heart1.setVisible(lives >= 1);
+        heart2.setVisible(lives >= 2);
+        heart3.setVisible(lives >= 3);
+
+        // Debug log
+        System.out.println("💖 Lives UI updated: " + lives + " lives");
     }
 
     @FXML
@@ -222,5 +225,4 @@ public class GameScene {
         gameLoop.stop();
         sceneManager.switchTo("Menu");
     }
-
 }
