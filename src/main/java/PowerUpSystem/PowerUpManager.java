@@ -1,6 +1,7 @@
 package PowerUpSystem;
 
 import UI.SceneManager;
+import audio.SoundManager;
 import core.GameLoop;
 import entities.Brick;
 import entities.Paddle;
@@ -32,7 +33,7 @@ public class PowerUpManager {
     private final ArrayList<PowerUp> activePowerUps;
     private final Map<PowerUpType, ActiveEffect> activeEffects;
     private final ObservableMap<PowerUpType, DoubleProperty> activePowerUpCredits;
-
+    private final SoundManager soundManager;
     // ===== CONTEXT & UTILS =====
     private final PowerUpContext context;
     private final Random random;
@@ -42,10 +43,11 @@ public class PowerUpManager {
 
     // ===== CONSTRUCTOR =====
 
-    public PowerUpManager(entities.Ball ball, Paddle paddle, ArrayList<entities.Ball> ballList) {
+    public PowerUpManager(entities.Ball ball, Paddle paddle, ArrayList<entities.Ball> ballList, SoundManager soundManager) {
         this.activePowerUps = new ArrayList<>();
+        this.soundManager = new SoundManager();
         this.activeEffects = new HashMap<>();
-        this.context = new PowerUpContext(ball, paddle, ballList);
+        this.context = new PowerUpContext(ball, paddle, ballList, soundManager);
         this.random = new Random();
         this.activePowerUpCredits = FXCollections.observableHashMap();
     }

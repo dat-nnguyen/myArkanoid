@@ -10,16 +10,19 @@ import static org.junit.jupiter.api.Assertions.*;
  * FakeSoundManager chỉ để dùng cho test.
  * không làm gì cả, chỉ để tránh lỗi NullPointerException.
  */
-class FakeSoundManager extends SoundManager {
-    public FakeSoundManager() {
-        super();
-    }
-    @Override
-    public void play(String soundName){
-        //nothing
-    }
-}
+
 public class BallTest {
+
+    class FakeSoundManager extends SoundManager {
+        public FakeSoundManager() {
+            super();
+        }
+        @Override
+        public void play(String soundName){
+            //nothing
+        }
+    }
+
     private Ball ball;
     private SoundManager fakeSoundManager;
     @BeforeEach

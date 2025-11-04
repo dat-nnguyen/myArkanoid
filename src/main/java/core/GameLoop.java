@@ -1,5 +1,8 @@
 package core;
 
+import CollisionManager.BallWithBrick;
+import CollisionManager.BallWithPaddle;
+import PowerUpSystem.PowerUpManager;
 import UI.Game.GameScene;
 import UI.SceneManager;
 import audio.SoundManager;
@@ -7,8 +10,6 @@ import entities.Ball;
 import entities.Brick;
 import entities.BrickType;
 import entities.Paddle;
-import CollisionManager.BallWithPaddle;
-import CollisionManager.BallWithBrick;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -16,8 +17,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import utils.Constants;
+
 import java.util.ArrayList;
-import PowerUpSystem.PowerUpManager;
 import java.util.Iterator;
 
 /**
@@ -28,7 +29,7 @@ public class GameLoop extends AnimationTimer {
 
     private final SceneManager sceneManager;
     private final GameScene gameScene;
-
+    private final SoundManager soundManager;
     private final Ball ball;
     private final Paddle paddle;
     private final ArrayList<Brick> brickList;
@@ -43,9 +44,10 @@ public class GameLoop extends AnimationTimer {
     // === NEW: Time scale for slow motion ===
     private double timeScale = 1.0; // 1.0 = normal, 0.5 = slow motion
 
-    public GameLoop(Ball ball, Paddle paddle, ArrayList<Brick> brickList, GraphicsContext gc,
+    public GameLoop(SoundManager soundManager, Ball ball, Paddle paddle, ArrayList<Brick> brickList, GraphicsContext gc,
                     InputHandler input, SceneManager sceneManager, GameScene gameScene,
                     PowerUpManager powerUpManager, ArrayList<Ball> ballList) {
+        this.soundManager = soundManager;
         this.sceneManager = sceneManager;
         this.gameScene = gameScene;
         this.ball = ball;
@@ -180,17 +182,17 @@ public class GameLoop extends AnimationTimer {
     private void checkCollision() {
         // Main ball collisions (only if has lives)
         if (ball.getLives() > 0) {
-            BallWithPaddle.checkCollision(ball, paddle);
+            BallWithPaddle.checkCollision(ball, paddle, soundManager);
             for (Brick brick : brickList) {
-                BallWithBrick.checkCollision(ball, brick);
+                BallWithBrick.checkCollision(ball, brick, soundManager);
             }
         }
 
         // Extra balls collisions
         for (Ball extraBall : ballList) {
-            BallWithPaddle.checkCollision(extraBall, paddle);
+            BallWithPaddle.checkCollision(extraBall, paddle, soundManager);
             for (Brick brick : brickList) {
-                BallWithBrick.checkCollision(extraBall, brick);
+                BallWithBrick.checkCollision(extraBall, brick, soundManager);
             }
         }
 

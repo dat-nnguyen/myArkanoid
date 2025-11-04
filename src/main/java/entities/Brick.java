@@ -1,10 +1,7 @@
 package entities;
 
 import core.GameObject;
-import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import utils.Constants;
 
 /**
  * Brick management.
@@ -82,6 +79,15 @@ public class Brick extends GameObject {
         this.currentBrickType = currentBrickType;
         lives = currentBrickType.getHits();
         System.out.println("\uD83E\uDDF1 Brick Init Success: " + getInfo() );
+    }
+
+    /**
+     *
+     * @param testTexturePath
+     * Constructor using for testing
+     */
+    public Brick(String testTexturePath) {
+        super(0, 0, 10, 10, testTexturePath);
     }
 
     @Override

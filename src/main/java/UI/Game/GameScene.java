@@ -85,8 +85,8 @@ public class GameScene {
         ball = new Ball(soundManager);
         InputHandler input = new InputHandler();
         ArrayList<Ball> ballList = new ArrayList<>();
-        powerUpManager = new PowerUpManager(ball, paddle, ballList);
-        gameLoop = new GameLoop(ball, paddle, brickList, gc, input, sceneManager, this, powerUpManager, ballList);
+        powerUpManager = new PowerUpManager(ball, paddle, ballList, soundManager);
+        gameLoop = new GameLoop(soundManager,ball, paddle, brickList, gc, input, sceneManager, this, powerUpManager, ballList);
 
         AnchorPane root;
         try {

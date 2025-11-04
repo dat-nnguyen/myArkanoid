@@ -1,15 +1,13 @@
 package CollisionManager;
 
-import UI.SceneManager;
 import audio.SoundManager;
 import entities.Ball;
-import entities.BrickType;
 import entities.Paddle;
 import utils.Constants;
 
 public class BallWithPaddle {
 
-    public static void checkCollision(Ball ball, Paddle paddle) {
+    public static void checkCollision(Ball ball, Paddle paddle, SoundManager soundManager) {
 
         double ballCenterX = ball.getPositionX() + ball.getRadius();
         double ballCenterY = ball.getPositionY() + ball.getRadius();
@@ -26,7 +24,7 @@ public class BallWithPaddle {
         double overlapY = lengthY - Math.abs(vectorY);
 
         if (overlapX > 0 && overlapY > 0) {
-            SceneManager.getInstance().getSoundManager().play("hit");
+            soundManager.play("hit");
             if (Math.abs(overlapX - overlapY) <= Constants.EPSILON) {
                 if (vectorX > 0) ball.setPositionX(ball.getPositionX() + overlapX);
                 else ball.setPositionX(ball.getPositionX() - overlapX);

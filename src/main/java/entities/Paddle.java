@@ -1,16 +1,13 @@
 package entities;
 
-import utils.Constants;
+import PowerUpSystem.PowerUpType;
 import core.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-
-import java.util.Objects;
+import utils.Constants;
 
 import java.util.Arrays;
-
-import PowerUpSystem.PowerUpType;
+import java.util.Objects;
 
 /**
  * Paddle management.
@@ -59,6 +56,16 @@ public class Paddle extends MovableObject {
     }
 
     /**
+     * second constructor using for testing
+     * @param testTexturePath
+     */
+    public Paddle(String testTexturePath) {
+        super(Constants.PADDLE_START_POSITION_X, Constants.PADDLE_START_POSITION_Y,
+                Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT, testTexturePath);
+        this.setDeltaX(speed);
+    }
+
+    /**
      * Handle the key press event for the passed-in key.
      *
      * @param keycode Key Being Listened To.
@@ -72,24 +79,23 @@ public class Paddle extends MovableObject {
 
     @Override
     public void move(double deltaTime) {
-
         double xMin = Constants.MARGIN_WIDTH;
-        double xMax = xMin + Constants.PLAY_SCREEN_WIDTH;
+        double xMax = xMin + Constants.PLAY_SCREEN_WIDTH - this.getWidth();
         double deltaX = 0;
 
         if (keyPressed[KeyCode.RIGHT.getCode()]) {
             deltaX += speed * deltaTime;
         }
         if (keyPressed[KeyCode.LEFT.getCode()]) {
-            deltaX += speed * deltaTime * (-1);
+            deltaX -= speed * deltaTime;
         }
 
         this.setDeltaX(deltaX);
 
         double newPositionX = this.getPositionX() + this.getDeltaX();
 
-        if (newPositionX + this.getWidth() > xMax) {
-            newPositionX = xMax - this.getWidth();
+        if (newPositionX > xMax) {
+            newPositionX = xMax;
             this.setDeltaX(0);
         } else if (newPositionX < xMin) {
             newPositionX = xMin;
@@ -102,7 +108,6 @@ public class Paddle extends MovableObject {
     @Override
     public void update(double deltaTime) {
         move(deltaTime);
-        // Update power-up sau...
     }
 
     @Override
@@ -112,8 +117,8 @@ public class Paddle extends MovableObject {
 
     @Override
     public void reset() {
-        speed = Constants.PADDLE_SPEED;
-        PowerUpType currentPowerUp = PowerUpType.NONE;
+        this.speed = Constants.PADDLE_SPEED;
+        this.currentPowerUp = PowerUpType.NONE; // ✅ FIX
         Arrays.fill(keyPressed, false);
         this.setDeltaX(speed);
         this.setPositionX(Constants.PADDLE_START_POSITION_X);
