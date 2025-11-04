@@ -1,12 +1,9 @@
 package entities;
 
-import UI.SceneManager;
 import audio.SoundManager;
-import javafx.scene.image.Image;
-import utils.Constants;
 import core.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import utils.Constants;
 
 /**
  * Ball management.
@@ -14,6 +11,7 @@ import javafx.scene.paint.Color;
  */
 public class Ball extends MovableObject {
 
+    private final SoundManager soundManager;
     private double speed = Constants.BALL_SPEED;
     private int radius = Constants.BALL_RADIUS;
     private double directionX = 0.0;
@@ -42,14 +40,27 @@ public class Ball extends MovableObject {
     /**
      * Initialize main ball.
      */
-    public Ball() {
+    public Ball(SoundManager soundManager) {
         super(Constants.BALL_START_POSITION_X, Constants.BALL_START_POSITION_Y,
                 Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2, Constants.BALL_TEXTURE_PATH);
         this.isMainBall = true;
+        this.soundManager = new SoundManager();
         System.out.println("⚽ Ball Init Success !");
         System.out.println("⚽ Remaining lives: " + lives);
     }
 
+    /**
+     *
+     * @param soundManager
+     * @param testTexturePath
+     * Second constructor using for testing
+     */
+    public Ball(SoundManager soundManager, String testTexturePath) {
+        super(Constants.BALL_START_POSITION_X, Constants.BALL_START_POSITION_Y,
+                Constants.BALL_RADIUS * 2, Constants.BALL_RADIUS * 2, testTexturePath); // <-- Dùng texture path được truyền vào
+        this.isMainBall = true;
+        this.soundManager = soundManager;
+    }
     @Override
     public void move(double deltaTime) {
         double xMin = Constants.MARGIN_WIDTH;
@@ -65,22 +76,22 @@ public class Ball extends MovableObject {
 
         // Wall collisions
         if (newPositionX + this.getWidth() > xMax) {
-            SceneManager.getInstance().getSoundManager().play("hit");
+            this.soundManager.play("hit");
             newPositionX = xMax - this.getWidth();
             directionX *= -1;
         } else if (newPositionX < xMin) {
-            SceneManager.getInstance().getSoundManager().play("hit");
+            this.soundManager.play("hit");
             newPositionX = xMin;
             directionX *= -1;
         }
 
         if (newPositionY < yMin) {
-            SceneManager.getInstance().getSoundManager().play("hit");
+            this.soundManager.play("hit");
             newPositionY = yMin;
             directionY *= -1;
         } else if (newPositionY > yMax + 20) {
             // Ball fell below screen
-            SceneManager.getInstance().getSoundManager().play("dead");
+            this.soundManager.play("dead");
 
             // === KEY CHANGE ===
             if (isMainBall) {

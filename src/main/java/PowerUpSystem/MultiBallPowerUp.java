@@ -1,5 +1,6 @@
 package PowerUpSystem;
 
+import audio.SoundManager;
 import entities.Ball;
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class MultiBallPowerUp extends InstantPowerUp {
 
         // Create N additional balls with different angles
         for (int i = 0; i < PowerUpConfig.MULTI_BALL_COUNT; i++) {
-            Ball newBall = new Ball();
+            Ball newBall = new Ball(new SoundManager());
 
             // Copy position and speed from active ball
             newBall.setPositionX(activeBall.getPositionX());

@@ -4,6 +4,7 @@ import PowerUpSystem.PowerUpManager;
 import PowerUpSystem.PowerUpType;
 import RenderManager.RenderMap;
 import UI.SceneManager;
+import audio.SoundManager;
 import core.GameLoop;
 import core.InputHandler;
 import entities.Ball;
@@ -47,7 +48,7 @@ public class GameScene {
     private final ArrayList<Brick> brickList;
     private final GraphicsContext gc;
     private int currentLevel = 1;
-
+    private final SoundManager soundManager = new  SoundManager();
     private final PowerUpManager powerUpManager;
     private final Map<PowerUpType, Node> powerUpUIMap = new HashMap<>();
 
@@ -81,7 +82,7 @@ public class GameScene {
         RenderMap renderMap = new RenderMap();
         brickList = new ArrayList<>();
         paddle = new Paddle();
-        ball = new Ball();
+        ball = new Ball(soundManager);
         InputHandler input = new InputHandler();
         ArrayList<Ball> ballList = new ArrayList<>();
         powerUpManager = new PowerUpManager(ball, paddle, ballList);

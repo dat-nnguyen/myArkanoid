@@ -18,13 +18,23 @@ public abstract class GameObject {
     private Image texture; // The texture of the object.
 
     private void loadTexture(String texturePath) {
-        texture = null;
+        //nếu path là null (ví dụ: khi test)
+        // bỏ qua để tránh lỗi.
+        if (texturePath == null || texturePath.isEmpty()) {
+            this.texture = null;
+            return;
+        }
+
+        // chỉ tải ảnh nếu tìm thấy
         try {
             String textureUrl = Objects.requireNonNull(getClass().getResource(texturePath)).toExternalForm();
             texture = new Image(textureUrl);
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
+            // nếu có lỗi
+            // Chỉ in ra lỗi và để texture là null.
+            // KHÔNG cố tải "/null.png" vì sẽ làm crash test.
             System.err.println("Image loading failed! File not found at: " + texturePath);
-            texture = new Image(Objects.requireNonNull(getClass().getResource("/null.png")).toExternalForm());
+            this.texture = null;
         }
     }
 
