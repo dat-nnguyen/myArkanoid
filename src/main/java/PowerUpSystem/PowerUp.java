@@ -4,10 +4,9 @@ import core.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
 import utils.Constants;
 
-
 /**
  * Abstract base class for all power-ups.
- * Power-ups fall from destroyed bricks and apply effects when caught by paddle.
+ * UPDATED: Added colors for FastBall, ExtraLife, SuddenDeath
  */
 public abstract class PowerUp extends MovableObject {
 
@@ -16,13 +15,6 @@ public abstract class PowerUp extends MovableObject {
     private final PowerUpType type;
     private double fallSpeed = Constants.POWERUP_FALL_SPEED;
 
-    /**
-     * Initialize power-up at given position.
-     *
-     * @param positionX X coordinate where brick was destroyed
-     * @param positionY Y coordinate where brick was destroyed
-     * @param type Type of this power-up
-     */
     public PowerUp(double positionX, double positionY, PowerUpType type) {
         super(positionX, positionY, Constants.POWERUP_WIDTH, Constants.POWERUP_HEIGHT, type.getTexturePath());
         this.type = type;
@@ -31,15 +23,11 @@ public abstract class PowerUp extends MovableObject {
 
     @Override
     public void move(double deltaTime) {
-        double oldY = this.getPositionY();
-        double newPositionY = oldY + fallSpeed * deltaTime;
-
-        System.out.println("🎈 PowerUp moving: " + oldY + " → " + newPositionY + " (delta: " + (fallSpeed * deltaTime) + ")");
+        double newPositionY = this.getPositionY() + fallSpeed * deltaTime;
 
         // Check if power-up fell off screen
         if (newPositionY > Constants.SCREEN_HEIGHT) {
             isActive = false;
-            System.out.println("❌ PowerUp fell off screen!");
         }
 
         this.setPositionY(newPositionY);
@@ -48,10 +36,7 @@ public abstract class PowerUp extends MovableObject {
     @Override
     public void update(double deltaTime) {
         if (isActive && !isCollected) {
-            System.out.println("🔄 PowerUp update - Active: " + isActive + ", Collected: " + isCollected);
             move(deltaTime);
-        } else {
-            System.out.println("⏸️ PowerUp NOT updating - Active: " + isActive + ", Collected: " + isCollected);
         }
     }
 
@@ -59,12 +44,11 @@ public abstract class PowerUp extends MovableObject {
     public void render(GraphicsContext gc) {
         if (isActive && !isCollected) {
             if (this.getTexture() != null) {
-                // Vẽ texture nếu có
+                // Draw texture if available
                 gc.drawImage(this.getTexture(), this.getPositionX(), this.getPositionY(),
                         this.getWidth(), this.getHeight());
             } else {
-                // Vẽ placeholder nếu không có texture
-                // Màu sắc khác nhau cho từng loại power-up
+                // Draw placeholder if no texture
                 switch (type) {
                     case EXPAND_PADDLE:
                         gc.setFill(javafx.scene.paint.Color.BLUE);
@@ -78,15 +62,30 @@ public abstract class PowerUp extends MovableObject {
                     case MULTI_BALL:
                         gc.setFill(javafx.scene.paint.Color.YELLOW);
                         break;
+                    case FAST_BALL:
+                        gc.setFill(javafx.scene.paint.Color.ORANGE);
+                        break;
+                    case EXTRA_LIFE:
+                        gc.setFill(javafx.scene.paint.Color.PINK);
+                        break;
+                    case SUDDEN_DEATH:
+                        gc.setFill(javafx.scene.paint.Color.BLACK);
+                        break;
+                    case SCORE_MULTIPLIER:
+                        gc.setFill(javafx.scene.paint.Color.GOLD);
+                        break;
+                    case SLOW_MOTION:
+                        gc.setFill(javafx.scene.paint.Color.CYAN);
+                        break;
                     default:
                         gc.setFill(javafx.scene.paint.Color.GRAY);
                 }
 
-                // Vẽ hình vuông màu
+                // Draw colored rectangle
                 gc.fillRect(this.getPositionX(), this.getPositionY(),
                         this.getWidth(), this.getHeight());
 
-                // Vẽ viền
+                // Draw border
                 gc.setStroke(javafx.scene.paint.Color.WHITE);
                 gc.setLineWidth(2);
                 gc.strokeRect(this.getPositionX(), this.getPositionY(),
@@ -101,29 +100,14 @@ public abstract class PowerUp extends MovableObject {
         isCollected = false;
     }
 
-    /**
-     * Apply power-up effect.
-     * Must be implemented by specific power-up classes.
-     *
-     * @param context Game context containing ball, paddle, etc.
-     */
     public abstract void applyEffect(PowerUpContext context);
-
-    /**
-     * Remove power-up effect.
-     * Must be implemented by specific power-up classes.
-     *
-     * @param context Game context containing ball, paddle, etc.
-     */
     public abstract void removeEffect(PowerUpContext context);
 
     // Getters and Setters
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
-
     public boolean isCollected() { return isCollected; }
     public void setCollected(boolean collected) { isCollected = collected; }
-
     public PowerUpType getType() { return type; }
     public double getFallSpeed() { return fallSpeed; }
     public void setFallSpeed(double fallSpeed) { this.fallSpeed = fallSpeed; }
