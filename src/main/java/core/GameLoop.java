@@ -11,7 +11,9 @@ import entities.Brick;
 import entities.BrickType;
 import entities.Paddle;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -41,12 +43,12 @@ public class GameLoop extends AnimationTimer {
     private final PowerUpManager powerUpManager;
     private final ArrayList<Ball> ballList;
 
-    // === NEW: Time scale for slow motion ===
-    private double timeScale = 1.0; // 1.0 = normal, 0.5 = slow motion
+    private final DoubleProperty timeScale = new SimpleDoubleProperty(1.0);
 
     public GameLoop(SoundManager soundManager, Ball ball, Paddle paddle, ArrayList<Brick> brickList, GraphicsContext gc,
                     InputHandler input, SceneManager sceneManager, GameScene gameScene,
                     PowerUpManager powerUpManager, ArrayList<Ball> ballList) {
+
         this.soundManager = soundManager;
         this.sceneManager = sceneManager;
         this.gameScene = gameScene;
@@ -59,8 +61,8 @@ public class GameLoop extends AnimationTimer {
         this.powerUpManager = powerUpManager;
         lastTime = 0;
 
-        // === NEW: Set GameLoop reference in PowerUpManager ===
-        powerUpManager.setGameLoop(this);
+        powerUpManager.setScoreProperty(this.score);
+        powerUpManager.setTimeScaleProperty(this.timeScale);
     }
 
     @Override
@@ -70,8 +72,7 @@ public class GameLoop extends AnimationTimer {
         double deltaTime = (now - lastTime) / secondStandard;
         lastTime = now;
 
-        // === NEW: Apply time scale (for slow motion) ===
-        double scaledDeltaTime = deltaTime * timeScale;
+        double scaledDeltaTime = deltaTime * timeScale.get();
 
         update(scaledDeltaTime);
 
@@ -241,11 +242,12 @@ public class GameLoop extends AnimationTimer {
 
     // === NEW: Time scale control (for slow motion) ===
     public double getTimeScale() {
-        return timeScale;
+        return timeScale.get();
     }
 
-    public void setTimeScale(double timeScale) {
-        this.timeScale = Math.max(0.1, Math.min(2.0, timeScale)); // Clamp 0.1-2.0
-        System.out.println("⏱️ Time scale changed: " + this.timeScale);
+    public void setTimeScale(double newTimeScaleValue) {
+        double clampedValue = Math.max(0.1, Math.min(2.0, newTimeScaleValue));
+        this.timeScale.set(clampedValue);
+        System.out.println("⏱️ Time scale changed: " + this.timeScale.get());
     }
 }

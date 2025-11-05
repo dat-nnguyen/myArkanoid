@@ -1,6 +1,6 @@
 package PowerUpSystem;
 
-import core.GameLoop;
+import javafx.beans.property.IntegerProperty;
 
 /**
  * Multiplies current score by 2 (instant effect).
@@ -14,16 +14,16 @@ public class ScoreMultiplierPowerUp extends InstantPowerUp {
 
     @Override
     public void applyEffect(PowerUpContext context) {
-        GameLoop gameLoop = context.getGameLoop();
+        IntegerProperty scoreProp = context.getScoreProperty();
 
-        if (gameLoop == null) {
-            System.err.println("💰 Score Multiplier failed: GameLoop not set in context!");
+        if (scoreProp == null) {
+            System.err.println("💰 Score Multiplier failed: ScoreProperty not set!");
             return;
         }
 
-        int currentScore = gameLoop.getScore();
+        int currentScore = scoreProp.get();
         int newScore = currentScore * PowerUpConfig.SCORE_MULTIPLIER_VALUE;
-        gameLoop.setScore(newScore);
+        scoreProp.set(newScore);
 
         System.out.println("💰 Score Multiplied: " + currentScore + " → " + newScore);
     }

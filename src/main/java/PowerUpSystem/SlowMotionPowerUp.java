@@ -1,11 +1,6 @@
 package PowerUpSystem;
+import javafx.beans.property.DoubleProperty;
 
-import core.GameLoop;
-
-/**
- * Slows down everything in the game (time scale effect).
- * REFACTORED: Now manages its own effect via GameLoop.
- */
 public class SlowMotionPowerUp extends TimedPowerUp {
 
     public SlowMotionPowerUp(double positionX, double positionY) {
@@ -14,29 +9,29 @@ public class SlowMotionPowerUp extends TimedPowerUp {
 
     @Override
     public void applyEffect(PowerUpContext context) {
-        GameLoop gameLoop = context.getGameLoop();
+        DoubleProperty timeScale = context.getTimeScaleProperty();
 
-        if (gameLoop == null) {
-            System.err.println("⏱️ Slow Motion failed: GameLoop not set in context!");
+        if (timeScale == null) {
+            System.err.println("⏱️ Slow Motion failed: TimeScaleProperty not set!");
             return;
         }
 
-        gameLoop.setTimeScale(PowerUpConfig.SLOW_MOTION_TIME_SCALE);
+        timeScale.set(PowerUpConfig.SLOW_MOTION_TIME_SCALE);
         System.out.println("⏱️ Slow Motion activated! Time scale: " +
-                PowerUpConfig.NORMAL_TIME_SCALE + " → " + PowerUpConfig.SLOW_MOTION_TIME_SCALE);
+                PowerUpConfig.NORMAL_TIME_SCALE + " → " + timeScale.get());
     }
 
     @Override
     public void removeEffect(PowerUpContext context) {
-        GameLoop gameLoop = context.getGameLoop();
+        DoubleProperty timeScale = context.getTimeScaleProperty();
 
-        if (gameLoop == null) {
-            System.err.println("⏱️ Slow Motion removal failed: GameLoop not set!");
+        if (timeScale == null) {
+            System.err.println("⏱️ Slow Motion removal failed: TimeScaleProperty not set!");
             return;
         }
 
-        gameLoop.setTimeScale(PowerUpConfig.NORMAL_TIME_SCALE);
+        timeScale.set(PowerUpConfig.NORMAL_TIME_SCALE);
         System.out.println("⏱️ Slow Motion ended! Time scale: " +
-                PowerUpConfig.SLOW_MOTION_TIME_SCALE + " → " + PowerUpConfig.NORMAL_TIME_SCALE);
+                PowerUpConfig.SLOW_MOTION_TIME_SCALE + " → " + timeScale.get());
     }
 }

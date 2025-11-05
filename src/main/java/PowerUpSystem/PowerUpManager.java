@@ -1,20 +1,17 @@
 package PowerUpSystem;
 
-import UI.SceneManager;
 import audio.SoundManager;
 import core.GameLoop;
 import entities.Brick;
 import entities.Paddle;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.canvas.GraphicsContext;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
+
+import java.util.*;
 
 /**
  * Manages all power-ups in the game.
@@ -31,7 +28,7 @@ public class PowerUpManager {
 
     // ===== COLLECTIONS =====
     private final ArrayList<PowerUp> activePowerUps;
-    private final Map<PowerUpType, ActiveEffect> activeEffects;
+    public final Map<PowerUpType, ActiveEffect> activeEffects;
     private final ObservableMap<PowerUpType, DoubleProperty> activePowerUpCredits;
     private final SoundManager soundManager;
     // ===== CONTEXT & UTILS =====
@@ -45,7 +42,7 @@ public class PowerUpManager {
 
     public PowerUpManager(entities.Ball ball, Paddle paddle, ArrayList<entities.Ball> ballList, SoundManager soundManager) {
         this.activePowerUps = new ArrayList<>();
-        this.soundManager = new SoundManager();
+        this.soundManager = soundManager;
         this.activeEffects = new HashMap<>();
         this.context = new PowerUpContext(ball, paddle, ballList, soundManager);
         this.random = new Random();
@@ -183,7 +180,7 @@ public class PowerUpManager {
                     paddle.getPositionY() + paddle.getHeight() >= powerUp.getPositionY();
 
             if (collisionX && collisionY) {
-                SceneManager.getInstance().getSoundManager().play("power");
+                this.soundManager.play("power");
                 collectPowerUp(powerUp);
 
                 // Show UI timer for timed power-ups only
@@ -249,13 +246,13 @@ public class PowerUpManager {
      * Returns null if no opposite exists.
      */
     private PowerUpType getOppositeType(PowerUpType type) {
-        switch (type) {
-            case EXPAND_PADDLE: return PowerUpType.SHRINK_PADDLE;
-            case SHRINK_PADDLE: return PowerUpType.EXPAND_PADDLE;
-            case FAST_BALL: return PowerUpType.SLOW_BALL;
-            case SLOW_BALL: return PowerUpType.FAST_BALL;
-            default: return null; // No opposite
-        }
+        return switch (type) {
+            case EXPAND_PADDLE -> PowerUpType.SHRINK_PADDLE;
+            case SHRINK_PADDLE -> PowerUpType.EXPAND_PADDLE;
+            case FAST_BALL -> PowerUpType.SLOW_BALL;
+            case SLOW_BALL -> PowerUpType.FAST_BALL;
+            default -> null; // No opposite
+        };
     }
 
     // ===============================================================
@@ -309,6 +306,13 @@ public class PowerUpManager {
         }
     }
 
+    public void setScoreProperty(IntegerProperty score) {
+    }
+
+    public void setTimeScaleProperty(DoubleProperty timeScale) {
+
+    }
+
     // ===============================================================
     // ACTIVE EFFECT TRACKER
     // ===============================================================
@@ -335,7 +339,7 @@ public class PowerUpManager {
     public double getSpawnChance() {
         return spawnChance;
     }
-
+    
     public void setSpawnChance(double spawnChance) {
         this.spawnChance = Math.max(0.0, Math.min(1.0, spawnChance));
     }
