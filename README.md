@@ -1,7 +1,7 @@
 # myArkanoid
 
 A classic brick-breaker game inspired by the arcade legend Arkanoid (1986).  
-Developed in **Java+** with **JavaFX** on macOS, the project showcases Object-Oriented Programming, game loop architecture, collision detection, scoring system and level design.
+Developed in **Java** with **JavaFX** on macOS, the project showcases Object-Oriented Programming, game loop architecture, collision detection, scoring system and level design.
 
 ## 🎮 Features  
 - Paddle control to bounce a ball and break bricks.  
