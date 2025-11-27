@@ -1,0 +1,51 @@
+.startButton {
+  -fx-opacity: 1.0;
+  -fx-scale-x: 1.0;
+  -fx-scale-y: 1.0;
+  -fx-transition: all 0.3s ease-in-out;
+}
+
+.startButton:hover {
+  -fx-effect: dropshadow(gaussian, #ffffff, 10, 0.2, 0, 0);
+  -fx-scale-x: 1.1;
+  -fx-scale-y: 1.1;
+}
+
+.tutorialButton {
+  -fx-opacity: 1.0;
+  -fx-scale-x: 1.0;
+  -fx-scale-y: 1.0;
+  -fx-transition: all 0.3s ease-in-out;
+}
+
+.tutorialButton:hover {
+  -fx-effect: dropshadow(gaussian, #ffffff, 10, 0.2, 0, 0);
+  -fx-scale-x: 1.1;
+  -fx-scale-y: 1.1;
+}
+
+.shopButton {
+  -fx-opacity: 1.0;
+  -fx-scale-x: 1.0;
+  -fx-scale-y: 1.0;
+  -fx-transition: all 0.3s ease-in-out;
+}
+
+.shopButton:hover {
+  -fx-effect: dropshadow(gaussian, #ffffff, 10, 0.2, 0, 0);
+  -fx-scale-x: 1.1;
+  -fx-scale-y: 1.1;
+}
+
+.exitButton {
+  -fx-opacity: 1.0;
+  -fx-scale-x: 1.0;
+  -fx-scale-y: 1.0;
+  -fx-transition: all 0.3s ease-in-out;
+}
+
+.exitButton:hover {
+  -fx-effect: dropshadow(gaussian, #ffffff, 10, 0.2, 0, 0);
+  -fx-scale-x: 1.1;
+  -fx-scale-y: 1.1;
+}

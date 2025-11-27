@@ -1,0 +1,110 @@
+.sideBar{
+  -fx-background-color: rgba(0, 0, 0, 0.51);
+}
+
+.buyButton{
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-insets: 0;
+  -fx-padding : 0;
+}
+
+
+.exitToMenu{
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-insets: 0;
+  -fx-padding : 0;
+}
+
+.exitToMenu:selected{
+  -fx-opacity: 1.0;
+  -fx-effect: dropshadow(gaussian, #ffffff, 10, 0.2, 0, 0);
+}
+
+.exitToMenu:hover{
+  -fx-scale-x: 1.2;
+  -fx-scale-y: 1.2;
+}
+
+.paddleButton{
+  -fx-background-color : transparent;
+  -fx-border-color : transparent;
+  -fx-background-insets : 0;
+  -fx-padding : 0;
+}
+
+.paddleButton:selected{
+  -fx-opacity: 1.0;
+  -fx-effect: dropshadow(gaussian, #ffffff, 10, 0.2, 0, 0);
+}
+
+.paddleButton:hover{
+  -fx-scale-x : 1.2;
+  -fx-scale-y : 1.2;
+}
+
+.ballButton{
+  -fx-background-color : transparent;
+  -fx-border-color : transparent;
+  -fx-background-insets : 0;
+  -fx-padding : 0;
+}
+
+.ballButton:selected{
+  -fx-opacity: 1.0;
+  -fx-effect: dropshadow(gaussian, #ffffff, 10, 0.2, 0, 0);
+}
+.ballButton:hover{
+  -fx-scale-x : 1.2;
+  -fx-scale-y : 1.2;
+}
+
+
+.skinDisplay{
+  -fx-background-color: rgba(0, 0, 0, 0.65);
+}
+
+.transparent-scroll{
+  -fx-background: transparent;
+  -fx-background-color: transparent;
+}
+
+.transparent-scroll .scroll-bar {
+  -fx-background-color: transparent;
+}
+
+.transparent-scroll .scroll-bar .track {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+.transparent-scroll .scroll-bar .thumb {
+  -fx-background-color: rgba(255, 255, 255, 0.2);
+  -fx-background-radius: 5;
+}
+
+.transparent-scroll .scroll-bar .increment-button,
+.transparent-scroll .scroll-bar .decrement-button {
+  -fx-background-color: transparent;
+  -fx-padding: 0;
+}
+
+.transparent-scroll .corner {
+  -fx-background-color: transparent;
+}
+
+.transparent-scroll  .viewport{
+  -fx-background-color: transparent;
+}
+
+.equipButton{
+  -fx-background-color: transparent;
+  -fx-border-color : transparent;
+  -fx-background-insets: 0;
+  -fx-padding : 0;
+}
+
+.zoom_out:hover{
+  -fx-scale-x : 1.05;
+  -fx-scale-y : 1.05;
+}

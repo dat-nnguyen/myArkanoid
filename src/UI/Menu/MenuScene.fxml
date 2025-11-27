@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1280.0" stylesheets="@Menu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Menu.MenuScene">
+   <children>
+      <ImageView fitHeight="930.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/menuImages/menubackground.png" />
+         </image></ImageView>
+      <ImageView fitHeight="126.0" fitWidth="850.0" layoutX="240.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/images/menuImages/title.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="startButton" fitHeight="41.0" fitWidth="156.0" layoutX="561.0" layoutY="465.0" onMouseClicked="#onStartClicked" pickOnBounds="true" preserveRatio="true" styleClass="startButton">
+         <image>
+            <Image url="@/images/menuImages/start1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="tutorialButton" fitHeight="36.0" fitWidth="229.0" layoutX="535.0" layoutY="535.0" onMouseClicked="#onTutorialClicked" pickOnBounds="true" preserveRatio="true" styleClass="tutorialButton">
+         <image>
+            <Image url="@/images/menuImages/tutorial1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="shopButton" fitHeight="39.0" fitWidth="130.0" layoutX="573.0" layoutY="600.0" onMouseClicked="#onShopClicked" pickOnBounds="true" preserveRatio="true" styleClass="shopButton">
+         <image>
+            <Image url="@/images/menuImages/shop1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="exitButton" fitHeight="36.0" fitWidth="100.0" layoutX="587.0" layoutY="670.0" onMouseClicked="#onExitClicked" pickOnBounds="true" preserveRatio="true" styleClass="exitButton">
+         <image>
+            <Image url="@/images/menuImages/exit1.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

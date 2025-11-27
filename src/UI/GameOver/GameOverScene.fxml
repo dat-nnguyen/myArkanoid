@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1280.0" stylesheets="@GameOver.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.GameOver.GameOverScene">
+   <children>
+      <ImageView fitHeight="930.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/GameOverImages/background.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="126.0" fitWidth="1000.0" layoutX="175.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/GameOverImages/gameOverTitle.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="586.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#ExitToMenu" styleClass="gameoverButton">
+         <graphic>
+            <ImageView fitHeight="46.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="/images/GameOverImages/playAgain.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button contentDisplay="GRAPHIC_ONLY" layoutX="522.0" layoutY="425.0" mnemonicParsing="false" onMouseClicked="#restartGame" styleClass="gameoverButton">
+         <graphic>
+            <ImageView fitHeight="52.0" fitWidth="235.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="/images/GameOverImages/quit.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+   </children>
+</AnchorPane>

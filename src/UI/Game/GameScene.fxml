@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fx:id="backgroundImageView" fitHeight="930.0" fitWidth="1280.0" preserveRatio="true">
+            <image>
+                <Image url="/levels/lv1/lv1Background.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="88.0" fitWidth="154.0" layoutX="24.0" layoutY="670.0" onMouseClicked="#pauseClicked" preserveRatio="true">
+            <image>
+                <Image url="/images/gameImages/pause-button.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="heart1" fitHeight="40.0" fitWidth="45.0" layoutX="1094.0" layoutY="834.0" preserveRatio="true">
+            <image>
+                <Image url="/images/gameImages/heart.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="heart2" fitHeight="40.0" fitWidth="45.0" layoutX="1154.0" layoutY="834.0" preserveRatio="true">
+            <image>
+                <Image url="/images/gameImages/heart.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="heart3" fitHeight="40.0" fitWidth="45.0" layoutX="1215.0" layoutY="834.0" preserveRatio="true">
+            <image>
+                <Image url="/images/gameImages/heart.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="88.0" fitWidth="154.0" layoutX="24.0" layoutY="798.0" onMouseClicked="#exitClicked" preserveRatio="true">
+            <image>
+                <Image url="/images/gameImages/exit-button.png" />
+            </image>
+        </ImageView>
+      <ImageView fitHeight="388.0" fitWidth="187.0" layoutX="7.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/General/anouncementKHUNG.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="203.0" fitWidth="187.0" layoutX="7.0" layoutY="420.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/General/creditsKHUNG.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="143.0" fitWidth="189.0" layoutX="1084.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/General/pointsKhung.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="451.0" fitWidth="189.0" layoutX="1084.0" layoutY="170.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/General/HIGHESTSCOREkhung.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="107.0" fitWidth="187.0" layoutX="1084.0" layoutY="639.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/General/LEVELSKHUNG.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="107.0" fitWidth="187.0" layoutX="1084.0" layoutY="787.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/General/LIFESKHUNG.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="frameImageView" fitHeight="851.0" fitWidth="990.0" layoutX="196.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/lv1/KHUNG1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="titleImageView" fitHeight="79.0" fitWidth="457.0" layoutX="412.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/levels/lv1/ARKANOID1.png" />
+         </image>
+      </ImageView>
+        <StackPane AnchorPane.topAnchor="659.0"
+                   AnchorPane.leftAnchor="1084.0"
+                   prefWidth="187"
+                   prefHeight="90"
+                   style="-fx-border-color: transparent;">
+            <Label fx:id="levelLabel" text="01"
+                   StackPane.alignment="CENTER"
+                   style="-fx-font-family: 'Agency FB';
+                          -fx-font-size: 55px;
+                          -fx-text-fill: white;
+                          -fx-font-weight: bold;" />
+        </StackPane>
+        <StackPane AnchorPane.topAnchor="50.0"
+                   AnchorPane.leftAnchor="1086.0"
+                   prefWidth="187"
+                   prefHeight="100"
+                   style="-fx-border-color: transparent;">
+            <Label fx:id="scoreLabel" text="0"
+                   StackPane.alignment="CENTER"
+                   style="-fx-font-family: 'Agency FB';
+                          -fx-font-size: 64px;
+                          -fx-text-fill: white;
+                          -fx-font-weight: bold;" />
+        </StackPane>
+        <VBox fx:id="boxOfPowerUp"
+              AnchorPane.topAnchor="50"
+              AnchorPane.leftAnchor="4.0"
+              prefWidth="187"
+              prefHeight="300"
+              spacing="10"
+              alignment="TOP_CENTER"
+              style="-fx-background: transparent;
+                           -fx-border-color: transparent;
+                           -fx-font-family: 'Agency FB';
+                           -fx-font-size: 20px;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;" >
+        </VBox>
+        <VBox fx:id="boxOfHighScores"
+              AnchorPane.topAnchor="230"
+              AnchorPane.leftAnchor="1086.0"
+              prefWidth="187"
+              prefHeight="365"
+              spacing="20"
+              alignment="TOP_CENTER"
+              style="-fx-background: transparent;
+                           -fx-border-color: transparent;
+                           -fx-font-family: 'Agency FB';
+                           -fx-font-size: 20px;
+                           -fx-font-weight: bold;" >
+        </VBox>
+        <StackPane AnchorPane.topAnchor="440.0"
+                   AnchorPane.leftAnchor="4.0"
+                   prefWidth="187.0"
+                   prefHeight="185.0"
+                   style="-fx-border-color: transparent;">
+            <Label fx:id="creditsLabel"
+                   StackPane.alignment="CENTER"
+                   style="-fx-font-family: 'Agency FB';
+                          -fx-font-size: 45px;
+                          -fx-text-fill: white;
+                          -fx-font-weight: bold;" />
+        </StackPane>
+    </children>
+</AnchorPane>
