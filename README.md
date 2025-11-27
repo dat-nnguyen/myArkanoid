@@ -11,7 +11,7 @@
 
 ---
 
-## II. Project Overview
+## I. Project Overview
 
 **Arkanoid** is a classic brick–breaker game recreated using **Java 25** and **JavaFX**, built with Object-Oriented Programming (OOP) principles and clean architectural design.  
 The project demonstrates structured game development, UI management, animation handling, and a modular system supporting upgrades, skins, and levels.
@@ -86,7 +86,7 @@ The project demonstrates structured game development, UI management, animation h
 
 ---
 
-## IV. Skin Collection
+## II. Skin Collection
 
 ### 🎱 Ball Skins
 <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
@@ -112,7 +112,7 @@ The project demonstrates structured game development, UI management, animation h
 
 ---
 
-## V. Gameplay Guide
+## III. Gameplay Guide
 
 ### Controls
 - **← / →** – Move paddle left/right
@@ -143,7 +143,7 @@ The project demonstrates structured game development, UI management, animation h
 
 ---
 
-## VI. Conclusion
+## IV. Conclusion
 
 The **Arkanoid Project** is not only a fun arcade-style game but also a solid demonstration of applying OOP principles in a real-world project.  
 Through this implementation, the team successfully practiced key concepts such as:
